@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BurgTV Portal - Device Management</title>
+    <title>BurgTV - Register Device</title>
+    <meta name="description" content="Register your device to access BurgTV premium IPTV services" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="favicon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- hCaptcha -->
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     
     <style>
         * {
@@ -35,12 +44,54 @@
         }
         
         body {
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, var(--bg) 0%, var(--bg-secondary) 100%);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
             min-height: 100vh;
             background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+        
+        /* Language Switcher */
+        .language-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: var(--card-hover);
+            color: var(--text);
+        }
+        
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
         }
         
         /* Animated background */
@@ -58,282 +109,240 @@
         }
         
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Header */
-        header {
-            background: rgba(17, 17, 19, 0.8);
+            max-width: 600px;
+            width: 100%;
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 25px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease-out;
         }
         
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(185, 74, 142, 0.2);
+            border-color: rgba(185, 74, 142, 0.3);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
         }
         
         .logo {
-            text-align: center;
+            margin-bottom: 2rem;
         }
         
-        /* Language Switcher */
-        .lang-switcher {
-            display: flex;
-            gap: 10px;
-            background: var(--card-bg);
-            padding: 5px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
+        .logo img {
+            height: 80px;
+            width: auto;
+            filter: drop-shadow(0 6px 20px rgba(185, 74, 142, 0.4));
         }
         
-        .lang-btn {
-            padding: 8px 16px;
-            background: transparent;
-            color: var(--text-secondary);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
+        .logo-fallback {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: none;
         }
         
-        .lang-btn.active {
-            background: var(--accent);
-            color: white;
-        }
-        
-        /* Stats Cards */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .stat-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 25px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-        
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            background: var(--card-hover);
-            box-shadow: 0 20px 40px rgba(185, 74, 142, 0.2);
-        }
-        
-        .stat-icon {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        
-        .stat-number {
+        h1 {
             font-size: 2.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--text) 0%, var(--text-secondary) 100%);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
-        .stat-label {
+        .subtitle {
             color: var(--text-secondary);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
         
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            background: var(--card-bg);
-            padding: 8px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            overflow-x: auto;
-        }
-        
-        .tab {
-            padding: 12px 24px;
-            background: transparent;
-            color: var(--text-secondary);
-            border: none;
+        /* Alert styles */
+        .alert {
+            padding: 1rem 1.2rem;
             border-radius: 12px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.3s;
-            white-space: nowrap;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
+            font-weight: 500;
         }
         
-        .tab:hover {
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--error);
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+        
+        .alert-info {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+        
+        /* Form styles */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        input, select {
+            padding: 1rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             background: rgba(255,255,255,0.05);
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: inherit;
         }
         
-        .tab.active {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 4px 12px rgba(185, 74, 142, 0.3);
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a0a0a8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.25rem;
+            padding-right: 3rem;
         }
         
-        /* Panels */
-        .panel {
+        select option {
+            background: var(--bg-secondary);
+            color: var(--text);
+            padding: 0.5rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 0 3px rgba(185, 74, 142, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+        
+        .input-mac {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            letter-spacing: 1px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .form-hint {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+            margin-top: 0.3rem;
+        }
+        
+        /* Custom Select con icone */
+        .device-select-wrapper {
+            position: relative;
+        }
+        
+        .device-options {
             display: none;
-            animation: fadeIn 0.4s;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-top: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         
-        .panel.active {
+        .device-options.show {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
         
         @keyframes fadeIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(10px);
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Cards */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 35px;
-            margin-bottom: 30px;
-            transition: all 0.3s;
-        }
-        
-        .card:hover {
-            border-color: rgba(185, 74, 142, 0.3);
-        }
-        
-        .card h2 {
-            font-size: 24px;
-            margin-bottom: 25px;
+        .device-option {
             display: flex;
             align-items: center;
             gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border);
         }
         
-        /* Device Grid */
-        .device-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+        .device-option:last-child {
+            border-bottom: none;
         }
         
-        .device-card {
-            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255,255,255,0.02) 100%);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 25px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+        .device-option:hover {
+            background: var(--card-hover);
         }
         
-        .device-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(185, 74, 142, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        
-        .device-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            border-color: var(--accent);
-        }
-        
-        .device-card:hover::after {
-            opacity: 1;
-        }
-        
-        .device-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        /* Device type badges with brand colors */
-        .device-type {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .device-type.fire-tv {
-            background: rgba(255, 153, 0, 0.1);
-            color: #FF9900;
-        }
-        
-        .device-type.samsung {
-            background: rgba(20, 40, 160, 0.1);
-            color: #1428A0;
-        }
-        
-        .device-type.lg {
-            background: rgba(165, 0, 52, 0.1);
-            color: #A50034;
-        }
-        
-        .device-type.apple {
-            background: rgba(0, 0, 0, 0.05);
-            color: #555;
-        }
-        
-        .device-type.android {
-            background: rgba(61, 220, 132, 0.1);
-            color: #3DDC84;
+        .device-option.selected {
+            background: rgba(185, 74, 142, 0.1);
+            color: var(--accent-light);
         }
         
         .device-icon {
@@ -342,130 +351,69 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 6px;
+            flex-shrink: 0;
         }
         
-        .device-mac {
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--accent-light);
-            margin: 15px 0;
-            padding: 12px;
-            background: rgba(185, 74, 142, 0.1);
-            border-radius: 10px;
-            text-align: center;
-            letter-spacing: 1px;
+        /* Icone brand specifiche */
+        .device-icon.firetv {
+            background: linear-gradient(45deg, #FF6B35, #FF1744);
         }
         
-        .device-info {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border);
+        .device-icon.samsung {
+            background: #1428A0;
         }
         
-        .device-info-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
+        .device-icon.lg {
+            background: #A50034;
+            border-radius: 50%;
         }
         
-        .device-info-label {
-            color: var(--text-secondary);
+        .device-icon.apple {
+            background: linear-gradient(135deg, #E5E5E7, #A3A3A3);
         }
         
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
+        .device-icon.android {
+            background: #3DDC84;
+            border-radius: 50%;
+        }
+        
+        .device-icon svg, .device-icon img {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .device-name {
             font-weight: 500;
         }
         
-        .status::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-        
-        .status.active {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--success);
-        }
-        
-        .status.trial {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--warning);
-        }
-        
-        .status.expired {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--error);
-        }
-        
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--text-secondary);
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 14px 18px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
+        /* Captcha container */
+        .captcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
             border-radius: 12px;
-            color: var(--text);
-            font-size: 15px;
-            transition: all 0.3s;
+            border: 1px solid var(--border);
         }
         
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 0 0 3px rgba(185, 74, 142, 0.1);
-        }
-        
-        input::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.5;
-        }
-        
-        .form-hint {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 8px;
-            opacity: 0.8;
-        }
-        
-        /* Buttons */
+        /* Button styles */
         .btn {
-            padding: 14px 28px;
+            padding: 1.2rem 2rem;
             border: none;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 0.8rem;
+            font-family: inherit;
         }
         
         .btn-primary {
@@ -474,713 +422,854 @@
             box-shadow: 0 4px 14px rgba(185, 74, 142, 0.3);
         }
         
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(185, 74, 142, 0.4);
         }
         
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
         .btn-secondary {
-            background: var(--card-bg);
-            color: var(--text);
-            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            margin-top: 1rem;
         }
         
         .btn-secondary:hover {
-            background: var(--card-hover);
-            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
         }
         
-        /* Alert Box */
-        .alert {
-            background: linear-gradient(135deg, rgba(185, 74, 142, 0.1) 0%, rgba(123, 67, 151, 0.1) 100%);
-            border: 1px solid rgba(185, 74, 142, 0.3);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 25px;
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
         
-        .alert h3 {
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Success state */
+        .success-state {
+            text-align: center;
+            display: none;
+            animation: fadeInSuccess 0.5s ease-in-out;
+        }
+        
+        .success-state.show {
+            display: block;
+        }
+        
+        @keyframes fadeInSuccess {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+        
+        .device-id-display {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .device-id-value {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success);
+            letter-spacing: 2px;
+            margin: 0.5rem 0;
+        }
+        
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 2rem;
+            font-size: 0.85rem;
+            z-index: 100;
+        }
+        
+        .footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
             color: var(--accent-light);
         }
         
-        /* Device Icons */
-        .icon-firetv {
-            width: 20px;
-            height: 20px;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff9900"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 21.6c-5.3 0-9.6-4.3-9.6-9.6S6.7 2.4 12 2.4s9.6 4.3 9.6 9.6-4.3 9.6-9.6 9.6zm-1.8-14.4c-.6 1.2-.9 2.4-.9 3.6 0 .6.3.9.9.9s.9-.3.9-.9c0-.9.3-1.8.6-2.7.6-1.2 1.5-2.1 2.7-2.7-.9-.3-1.8-.3-2.7 0-.6.3-1.2.9-1.5 1.8zm3.6 6.6c0 1.2-.9 2.1-2.1 2.1s-2.1-.9-2.1-2.1c0-.6.3-1.5.6-2.1.3-.9.9-1.5 1.5-2.1.6.6 1.2 1.2 1.5 2.1.3.6.6 1.5.6 2.1z"/></svg>') no-repeat center;
-            background-size: contain;
-        }
-        
-        /* Additional device cards */
-        .device-card.lg-tv {
-            border-top: 2px solid #A50034;
-        }
-        
-        .device-card.fire-tv {
-            border-top: 2px solid #FF9900;
-        }
-        
-        .device-card.samsung-tv {
-            border-top: 2px solid #1428A0;
-        }
-        
-        .device-card.apple-tv {
-            border-top: 2px solid #555;
-        }
-        
-        .device-card.android-tv {
-            border-top: 2px solid #3DDC84;
-        }
-        
-        /* Button improvements */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn svg {
-            flex-shrink: 0;
-        }
+        /* Responsive */
         @media (max-width: 768px) {
-            .stats {
-                grid-template-columns: 1fr 1fr;
+            .container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
             }
             
-            .device-grid {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .form-row {
                 grid-template-columns: 1fr;
             }
             
-            .tabs {
-                overflow-x: auto;
+            .language-switcher {
+                top: 0.5rem;
+                right: 0.5rem;
+                padding: 0.3rem;
             }
             
-            .header-content {
+            .lang-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .footer {
                 flex-direction: column;
-                gap: 20px;
+                gap: 0.5rem;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <img src="logo.svg" alt="BurgTV" style="height: 120px; width: auto; filter: drop-shadow(0 6px 20px rgba(185, 74, 142, 0.4));">
-                </div>
-                <div class="lang-switcher">
-                    <button class="lang-btn active" onclick="setLanguage('en')">🇬🇧 EN</button>
-                    <button class="lang-btn" onclick="setLanguage('it')">🇮🇹 IT</button>
-                </div>
-            </div>
-        </div>
-    </header>
-    
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="lang-btn active" onclick="changeLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="changeLanguage('it')">IT</button>
+        <button class="lang-btn" onclick="changeLanguage('de')">DE</button>
+        <button class="lang-btn" onclick="changeLanguage('es')">ES</button>
+        <button class="lang-btn" onclick="changeLanguage('fr')">FR</button>
+    </div>
+
     <div class="container">
-        <!-- Statistics -->
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-number" id="totalDevices">0</div>
-                <div class="stat-label" data-lang="total-devices">Total Devices</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🟢</div>
-                <div class="stat-number" id="activeDevices">0</div>
-                <div class="stat-label" data-lang="active-now">Active Now</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">⏰</div>
-                <div class="stat-number" id="trialDays">7</div>
-                <div class="stat-label" data-lang="trial-days">Trial Days</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">📋</div>
-                <div class="stat-number" id="totalPlaylists">0</div>
-                <div class="stat-label" data-lang="playlists">Playlists</div>
-            </div>
-        </div>
-        
-        <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('devices', this)">
-                <span>📺</span>
-                <span data-lang="tab-devices">Devices</span>
-            </button>
-            <button class="tab" onclick="switchTab('add', this)">
-                <span>➕</span>
-                <span data-lang="tab-add">Add Device</span>
-            </button>
-            <button class="tab" onclick="switchTab('account', this)">
-                <span>👤</span>
-                <span data-lang="tab-account">Account</span>
-            </button>
-            <button class="tab" onclick="switchTab('help', this)">
-                <span>❓</span>
-                <span data-lang="tab-help">Help</span>
-            </button>
-        </div>
-        
-        <!-- Devices Panel -->
-        <div id="devices" class="panel active">
-            <div class="card">
-                <h2><span>🔌</span> <span data-lang="your-devices">Your Devices</span></h2>
-                <div class="device-grid" id="deviceList">
-                    <!-- I dispositivi verranno caricati dinamicamente da Supabase -->
+        <!-- Registration Form -->
+        <div id="registrationForm">
+            <div class="header">
+                <div class="logo">
+                    <img src="logo.svg" alt="BurgTV" onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block'">
+                    <div class="logo-fallback">📺</div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Add Device Panel -->
-        <div id="add" class="panel">
-            <div class="card">
-                <h2><span>🔗</span> <span data-lang="connect-device">Connect New Device</span></h2>
-                <form id="addDeviceForm">
-                    <div class="form-group">
-                        <label data-lang="device-type">Device Type</label>
-                        <select id="deviceType" required>
-                            <option value="" data-lang="select-device">Select device...</option>
-                            <option value="firetv">
-                                Amazon Fire TV Stick
-                            </option>
-                            <option value="samsung">
-                                Samsung Smart TV
-                            </option>
-                            <option value="lg">
-                                LG Smart TV
-                            </option>
-                            <option value="appletv">
-                                Apple TV
-                            </option>
-                            <option value="android">
-                                Android TV
-                            </option>
-                            <option value="ios">
-                                iPhone/iPad
-                            </option>
-                            <option value="androidphone">
-                                Android Phone
-                            </option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label data-lang="mac-address">MAC Address / Device ID</label>
-                        <input type="text" id="macAddress" placeholder="Ex: AA:BB:CC:DD:EE:FF" required>
-                        <div class="form-hint" data-lang="mac-hint">Find this in the app on your device</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label data-lang="m3u-url">M3U Playlist URL</label>
-                        <input type="url" id="m3uUrl" placeholder="http://example.com/playlist.m3u" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label data-lang="epg-url">EPG URL (Optional)</label>
-                        <input type="url" id="epgUrl" placeholder="http://example.com/epg.xml">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label data-lang="device-name">Device Name (Optional)</label>
-                        <input type="text" id="deviceName" placeholder="Ex: Living Room TV">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <span>💾</span>
-                        <span data-lang="save-device">Save Device</span>
-                    </button>
-                </form>
+                <h1 data-i18n="title">Register Device</h1>
+                <p class="subtitle" data-i18n="subtitle">Connect your device to BurgTV and start enjoying premium IPTV services</p>
             </div>
             
-            <div class="alert">
-                <h3><span>📱</span> <span data-lang="find-mac">How to find MAC Address</span></h3>
-                <ul style="margin-left: 20px; line-height: 1.8; color: var(--text-secondary);">
-                    <li><strong>Fire TV:</strong> Settings → My Fire TV → About → Network</li>
-                    <li><strong>Samsung TV:</strong> Settings → Support → About This TV</li>
-                    <li><strong>LG TV:</strong> Settings → All Settings → General → About This TV</li>
-                    <li><strong>Apple TV:</strong> Settings → General → About</li>
-                    <li><strong>Mobile:</strong> <span data-lang="auto-generated">Auto-generated in app</span></li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Account Panel -->
-        <div id="account" class="panel">
-            <div class="card">
-                <h2><span>⚙️</span> <span data-lang="account-settings">Account Settings</span></h2>
+            <!-- Alert container -->
+            <div id="alertContainer"></div>
+            
+            <form class="form" id="deviceForm">
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" value="user@example.com" readonly>
-                </div>
-                <div class="form-group">
-                    <label data-lang="subscription-status">Subscription Status</label>
-                    <div class="status trial">
-                        <span data-lang="free-trial">Free Trial - 7 days remaining</span>
+                    <label for="deviceType" data-i18n="deviceType">Device Type</label>
+                    <div class="device-select-wrapper">
+                        <input type="text" id="deviceTypeDisplay" data-i18n-placeholder="selectDevice" placeholder="Select your device..." readonly onclick="toggleDeviceOptions()">
+                        <input type="hidden" id="deviceType" required>
+                        
+                        <div class="device-options" id="deviceOptions">
+                            <div class="device-option" data-value="firetv" onclick="selectDevice('firetv', this)">
+                                <div class="device-icon firetv">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                                <span class="device-name">Amazon Fire TV Stick</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="samsung" onclick="selectDevice('samsung', this)">
+                                <div class="device-icon samsung">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                        <rect x="2" y="6" width="20" height="12" rx="2"/>
+                                        <circle cx="12" cy="12" r="2"/>
+                                    </svg>
+                                </div>
+                                <span class="device-name">Samsung Smart TV</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="lg" onclick="selectDevice('lg', this)">
+                                <div class="device-icon lg">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                        <circle cx="8" cy="12" r="3"/>
+                                        <path d="M11 9h7v6h-5v-3h3"/>
+                                    </svg>
+                                </div>
+                                <span class="device-name">LG Smart TV</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="appletv" onclick="selectDevice('appletv', this)">
+                                <div class="device-icon apple">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#333">
+                                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                    </svg>
+                                </div>
+                                <span class="device-name">Apple TV</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="android" onclick="selectDevice('android', this)">
+                                <div class="device-icon android">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                        <path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/>
+                                    </svg>
+                                </div>
+                                <span class="device-name">Android TV</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="ios" onclick="selectDevice('ios', this)">
+                                <div class="device-icon apple">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#333">
+                                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                    </svg>
+                                </div>
+                                <span class="device-name">iPhone/iPad</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label data-lang="device-limit">Device Limit</label>
-                    <div>3 / 5 <span data-lang="devices-used">devices used</span></div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="macAddress" data-i18n="macAddress">MAC Address</label>
+                        <input 
+                            type="text" 
+                            id="macAddress" 
+                            class="input-mac"
+                            placeholder="AA:BB:CC:DD:EE:FF" 
+                            pattern="([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})"
+                            title="Format: AA:BB:CC:DD:EE:FF"
+                            required
+                        >
+                        <div class="form-hint" data-i18n="macHint">Find in device network settings</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deviceName" data-i18n="deviceName">Device Name (Optional)</label>
+                        <input 
+                            type="text" 
+                            id="deviceName" 
+                            data-i18n-placeholder="deviceNamePlaceholder"
+                            placeholder="Living Room TV"
+                            maxlength="50"
+                        >
+                        <div class="form-hint" data-i18n="deviceNameHint">For easy identification</div>
+                    </div>
                 </div>
-                <button class="btn btn-primary">
-                    <span>🚀</span>
-                    <span data-lang="upgrade">Upgrade to Premium - €5.99</span>
+                
+                <div class="form-group">
+                    <label for="m3uUrl" data-i18n="m3uUrl">M3U Playlist URL</label>
+                    <input 
+                        type="url" 
+                        id="m3uUrl" 
+                        placeholder="https://example.com/playlist.m3u" 
+                        required
+                    >
+                    <div class="form-hint" data-i18n="m3uHint">Your IPTV provider's playlist URL</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="epgUrl" data-i18n="epgUrl">EPG URL (Optional)</label>
+                    <input 
+                        type="url" 
+                        id="epgUrl" 
+                        placeholder="https://example.com/epg.xml"
+                    >
+                    <div class="form-hint" data-i18n="epgHint">Electronic Program Guide for TV schedules</div>
+                </div>
+                
+                <div class="captcha-container">
+                    <div class="h-captcha" 
+                         data-sitekey="10000000-ffff-ffff-ffff-000000000001"
+                         data-callback="onRegisterCaptcha"
+                         data-theme="dark">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span>💾</span>
+                    <span data-i18n="registerButton">Register Device</span>
                 </button>
-            </div>
+            </form>
         </div>
         
-        <!-- Help Panel -->
-        <div id="help" class="panel">
-            <div class="card">
-                <h2><span>📖</span> <span data-lang="setup-guide">Setup Guide</span></h2>
-                <ol style="margin-left: 20px; line-height: 2; color: var(--text-secondary);">
-                    <li data-lang="step1">Download the app on your device (TV, Fire Stick, Mobile)</li>
-                    <li data-lang="step2">Open the app and find the MAC Address displayed</li>
-                    <li data-lang="step3">Come here and click "Add Device"</li>
-                    <li data-lang="step4">Enter the MAC Address and your M3U playlist URL</li>
-                    <li data-lang="step5">Save and go back to the app - it will sync automatically!</li>
-                </ol>
+        <!-- Success State -->
+        <div id="successState" class="success-state">
+            <div class="success-icon">✅</div>
+            <h1 data-i18n="successTitle">Device Registered Successfully!</h1>
+            <p class="subtitle" data-i18n="successSubtitle">Your device has been registered and is ready to use</p>
+            
+            <div class="device-id-display">
+                <p><strong data-i18n="yourMac">Your MAC Address:</strong></p>
+                <div class="device-id-value" id="registeredMac">AA:BB:CC:DD:EE:FF</div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;" data-i18n="macUsage">
+                    Use this MAC address to access your device dashboard
+                </p>
             </div>
             
-            <div class="card">
-                <h2><span>📥</span> <span data-lang="download-apps">Download Apps</span></h2>
-                <p style="margin-bottom: 25px; color: var(--text-secondary);" data-lang="download-desc">Get the app for your device:</p>
-                <div style="display: grid; gap: 12px;">
-                    <button class="btn btn-secondary" onclick="alert('Fire TV link coming soon')">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9900" style="margin-right: 8px;">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12.5v9l7-4.5-7-4.5z"/>
-                        </svg>
-                        Amazon Fire TV Stick
-                    </button>
-                    <button class="btn btn-secondary" onclick="alert('Samsung TV link coming soon')">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#1428A0" style="margin-right: 8px;">
-                            <ellipse cx="12" cy="12" rx="11" ry="4.5" transform="rotate(-30 12 12)"/>
-                        </svg>
-                        Samsung Smart TV
-                    </button>
-                    <button class="btn btn-secondary" onclick="alert('LG TV link coming soon')">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#A50034" style="margin-right: 8px;">
-                            <circle cx="8" cy="12" r="3"/>
-                            <path d="M11 9h7v6h-5v-3h3"/>
-                        </svg>
-                        LG Smart TV
-                    </button>
-                    <button class="btn btn-secondary" onclick="alert('Apple TV link coming soon')">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px; color: #555;">
-                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                        </svg>
-                        Apple TV
-                    </button>
-                    <button class="btn btn-secondary" onclick="alert('Android link coming soon')">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#3DDC84" style="margin-right: 8px;">
-                            <path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/>
-                        </svg>
-                        Android
-                    </button>
-                    <button class="btn btn-secondary" onclick="alert('iOS link coming soon')">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px; color: #555;">
-                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                        </svg>
-                        iOS
-                    </button>
-                </div>
-            </div>
+            <button class="btn btn-primary" onclick="goToDashboard()">
+                <span>🚀</span>
+                <span data-i18n="dashboardButton">Access Dashboard</span>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="registerAnother()">
+                <span>➕</span>
+                <span data-i18n="registerAnotherButton">Register Another Device</span>
+            </button>
         </div>
     </div>
     
-    <!-- Supabase Client -->
+    <!-- Footer -->
+    <div class="footer">
+        <a href="/legal/terms.html" data-i18n="terms">Terms of Service</a>
+        <a href="/legal/privacy.html" data-i18n="privacy">Privacy Policy</a>
+    </div>
+    
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <script>
-        // ===== CONFIGURAZIONE SUPABASE =====
+        // ===== CONFIGURAZIONE =====
         const SUPABASE_URL = 'https://ugspmqfduabfmfsoxqoc.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3BtcWZkdWFiZm1mc294cW9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyODY0NjEsImV4cCI6MjA3MDg2MjQ2MX0.euDiQhUl4NJbuVeClfunDV8wVaWITK_UNLrdZeMYKC0';
         
         // Inizializza Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        // ===== TRADUZIONI =====
+        // ===== INTERNATIONALIZATION =====
         const translations = {
             en: {
-                'total-devices': 'Total Devices',
-                'active-now': 'Active Now',
-                'trial-days': 'Trial Days',
-                'playlists': 'Playlists',
-                'tab-devices': 'Devices',
-                'tab-add': 'Add Device',
-                'tab-account': 'Account',
-                'tab-help': 'Help',
-                'your-devices': 'Your Devices',
-                'status-trial': 'Trial',
-                'status-active': 'Active',
-                'status-expired': 'Expired',
-                'playlist': 'Playlist',
-                'added': 'Added',
-                'connect-device': 'Connect New Device',
-                'device-type': 'Device Type',
-                'select-device': 'Select device...',
-                'mac-address': 'MAC Address / Device ID',
-                'mac-hint': 'Find this in the app on your device',
-                'm3u-url': 'M3U Playlist URL',
-                'epg-url': 'EPG URL (Optional)',
-                'device-name': 'Device Name (Optional)',
-                'save-device': 'Save Device',
-                'find-mac': 'How to find MAC Address',
-                'auto-generated': 'Auto-generated in app',
-                'account-settings': 'Account Settings',
-                'subscription-status': 'Subscription Status',
-                'free-trial': 'Free Trial - 7 days remaining',
-                'device-limit': 'Device Limit',
-                'devices-used': 'devices used',
-                'upgrade': 'Upgrade to Premium - €5.99',
-                'setup-guide': 'Setup Guide',
-                'step1': 'Download the app on your device (TV, Fire Stick, Mobile)',
-                'step2': 'Open the app and find the MAC Address displayed',
-                'step3': 'Come here and click "Add Device"',
-                'step4': 'Enter the MAC Address and your M3U playlist URL',
-                'step5': 'Save and go back to the app - it will sync automatically!',
-                'download-apps': 'Download Apps',
-                'download-desc': 'Get the app for your device:'
+                title: "Register Device",
+                subtitle: "Connect your device to BurgTV and start enjoying premium IPTV services",
+                deviceType: "Device Type",
+                selectDevice: "Select your device...",
+                macAddress: "MAC Address",
+                macHint: "Find in device network settings",
+                deviceName: "Device Name (Optional)",
+                deviceNamePlaceholder: "Living Room TV",
+                deviceNameHint: "For easy identification",
+                m3uUrl: "M3U Playlist URL",
+                m3uHint: "Your IPTV provider's playlist URL",
+                epgUrl: "EPG URL (Optional)",
+                epgHint: "Electronic Program Guide for TV schedules",
+                registerButton: "Register Device",
+                successTitle: "Device Registered Successfully!",
+                successSubtitle: "Your device has been registered and is ready to use",
+                yourMac: "Your MAC Address:",
+                macUsage: "Use this MAC address to access your device dashboard",
+                dashboardButton: "Access Dashboard",
+                registerAnotherButton: "Register Another Device",
+                terms: "Terms of Service",
+                privacy: "Privacy Policy",
+                errors: {
+                    selectDevice: "Please select a device type",
+                    enterMac: "Please enter a MAC address",
+                    invalidMac: "Invalid MAC address format. Use AA:BB:CC:DD:EE:FF",
+                    enterM3u: "Please enter an M3U playlist URL",
+                    invalidM3u: "M3U URL must start with http:// or https://",
+                    completeCaptcha: "Please complete the captcha verification",
+                    macExists: "This MAC address is already registered",
+                    registrationFailed: "Registration failed. Please try again"
+                },
+                registering: "Registering Device..."
             },
             it: {
-                'total-devices': 'Dispositivi Totali',
-                'active-now': 'Attivi Ora',
-                'trial-days': 'Giorni Trial',
-                'playlists': 'Playlist',
-                'tab-devices': 'Dispositivi',
-                'tab-add': 'Aggiungi Dispositivo',
-                'tab-account': 'Account',
-                'tab-help': 'Aiuto',
-                'your-devices': 'I Tuoi Dispositivi',
-                'status-trial': 'Prova',
-                'status-active': 'Attivo',
-                'status-expired': 'Scaduto',
-                'playlist': 'Playlist',
-                'added': 'Aggiunto',
-                'connect-device': 'Collega Nuovo Dispositivo',
-                'device-type': 'Tipo di Dispositivo',
-                'select-device': 'Seleziona dispositivo...',
-                'mac-address': 'Indirizzo MAC / ID Dispositivo',
-                'mac-hint': 'Lo trovi nell\'app sul dispositivo',
-                'm3u-url': 'URL Playlist M3U',
-                'epg-url': 'URL EPG (Opzionale)',
-                'device-name': 'Nome Dispositivo (Opzionale)',
-                'save-device': 'Salva Dispositivo',
-                'find-mac': 'Come trovare l\'indirizzo MAC',
-                'auto-generated': 'Generato automaticamente nell\'app',
-                'account-settings': 'Impostazioni Account',
-                'subscription-status': 'Stato Abbonamento',
-                'free-trial': 'Prova Gratuita - 7 giorni rimanenti',
-                'device-limit': 'Limite Dispositivi',
-                'devices-used': 'dispositivi usati',
-                'upgrade': 'Passa a Premium - €5.99',
-                'setup-guide': 'Guida alla Configurazione',
-                'step1': 'Scarica l\'app sul tuo dispositivo (TV, Fire Stick, Mobile)',
-                'step2': 'Apri l\'app e trova il MAC Address mostrato',
-                'step3': 'Vieni qui e clicca "Aggiungi Dispositivo"',
-                'step4': 'Inserisci il MAC Address e l\'URL della tua playlist M3U',
-                'step5': 'Salva e torna all\'app - si sincronizzerà automaticamente!',
-                'download-apps': 'Scarica le App',
-                'download-desc': 'Scarica l\'app per il tuo dispositivo:'
+                title: "Registra Dispositivo",
+                subtitle: "Collega il tuo dispositivo a BurgTV e inizia a goderti i servizi IPTV premium",
+                deviceType: "Tipo di Dispositivo",
+                selectDevice: "Seleziona il tuo dispositivo...",
+                macAddress: "Indirizzo MAC",
+                macHint: "Trova nelle impostazioni di rete del dispositivo",
+                deviceName: "Nome Dispositivo (Opzionale)",
+                deviceNamePlaceholder: "TV Salotto",
+                deviceNameHint: "Per identificazione facile",
+                m3uUrl: "URL Playlist M3U",
+                m3uHint: "URL della playlist del tuo provider IPTV",
+                epgUrl: "URL EPG (Opzionale)",
+                epgHint: "Guida Elettronica ai Programmi per gli orari TV",
+                registerButton: "Registra Dispositivo",
+                successTitle: "Dispositivo Registrato con Successo!",
+                successSubtitle: "Il tuo dispositivo è stato registrato ed è pronto all'uso",
+                yourMac: "Il tuo Indirizzo MAC:",
+                macUsage: "Usa questo indirizzo MAC per accedere al pannello del dispositivo",
+                dashboardButton: "Accedi al Pannello",
+                registerAnotherButton: "Registra un Altro Dispositivo",
+                terms: "Termini di Servizio",
+                privacy: "Privacy Policy",
+                errors: {
+                    selectDevice: "Seleziona un tipo di dispositivo",
+                    enterMac: "Inserisci un indirizzo MAC",
+                    invalidMac: "Formato indirizzo MAC non valido. Usa AA:BB:CC:DD:EE:FF",
+                    enterM3u: "Inserisci un URL playlist M3U",
+                    invalidM3u: "L'URL M3U deve iniziare con http:// o https://",
+                    completeCaptcha: "Completa la verifica captcha",
+                    macExists: "Questo indirizzo MAC è già registrato",
+                    registrationFailed: "Registrazione fallita. Riprova"
+                },
+                registering: "Registrazione in corso..."
+            },
+            de: {
+                title: "Gerät Registrieren",
+                subtitle: "Verbinden Sie Ihr Gerät mit BurgTV und genießen Sie Premium-IPTV-Dienste",
+                deviceType: "Gerätetyp",
+                selectDevice: "Wählen Sie Ihr Gerät...",
+                macAddress: "MAC-Adresse",
+                macHint: "In den Netzwerkeinstellungen des Geräts finden",
+                deviceName: "Gerätename (Optional)",
+                deviceNamePlaceholder: "Wohnzimmer TV",
+                deviceNameHint: "Zur einfachen Identifizierung",
+                m3uUrl: "M3U Playlist URL",
+                m3uHint: "Playlist-URL Ihres IPTV-Anbieters",
+                epgUrl: "EPG URL (Optional)",
+                epgHint: "Elektronischer Programmführer für TV-Programme",
+                registerButton: "Gerät Registrieren",
+                successTitle: "Gerät Erfolgreich Registriert!",
+                successSubtitle: "Ihr Gerät wurde registriert und ist einsatzbereit",
+                yourMac: "Ihre MAC-Adresse:",
+                macUsage: "Verwenden Sie diese MAC-Adresse für den Zugriff auf Ihr Gerätepanel",
+                dashboardButton: "Zum Dashboard",
+                registerAnotherButton: "Weiteres Gerät Registrieren",
+                terms: "Nutzungsbedingungen",
+                privacy: "Datenschutz",
+                errors: {
+                    selectDevice: "Bitte wählen Sie einen Gerätetyp",
+                    enterMac: "Bitte geben Sie eine MAC-Adresse ein",
+                    invalidMac: "Ungültiges MAC-Adressformat. Verwenden Sie AA:BB:CC:DD:EE:FF",
+                    enterM3u: "Bitte geben Sie eine M3U-Playlist-URL ein",
+                    invalidM3u: "M3U-URL muss mit http:// oder https:// beginnen",
+                    completeCaptcha: "Bitte vervollständigen Sie die Captcha-Überprüfung",
+                    macExists: "Diese MAC-Adresse ist bereits registriert",
+                    registrationFailed: "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut"
+                },
+                registering: "Gerät wird registriert..."
+            },
+            es: {
+                title: "Registrar Dispositivo",
+                subtitle: "Conecta tu dispositivo a BurgTV y disfruta de servicios IPTV premium",
+                deviceType: "Tipo de Dispositivo",
+                selectDevice: "Selecciona tu dispositivo...",
+                macAddress: "Dirección MAC",
+                macHint: "Encuentra en la configuración de red del dispositivo",
+                deviceName: "Nombre del Dispositivo (Opcional)",
+                deviceNamePlaceholder: "TV Sala de Estar",
+                deviceNameHint: "Para identificación fácil",
+                m3uUrl: "URL de Lista M3U",
+                m3uHint: "URL de lista de tu proveedor IPTV",
+                epgUrl: "URL EPG (Opcional)",
+                epgHint: "Guía Electrónica de Programas para horarios de TV",
+                registerButton: "Registrar Dispositivo",
+                successTitle: "¡Dispositivo Registrado con Éxito!",
+                successSubtitle: "Tu dispositivo ha sido registrado y está listo para usar",
+                yourMac: "Tu Dirección MAC:",
+                macUsage: "Usa esta dirección MAC para acceder al panel de tu dispositivo",
+                dashboardButton: "Acceder al Panel",
+                registerAnotherButton: "Registrar Otro Dispositivo",
+                terms: "Términos de Servicio",
+                privacy: "Política de Privacidad",
+                errors: {
+                    selectDevice: "Por favor selecciona un tipo de dispositivo",
+                    enterMac: "Por favor ingresa una dirección MAC",
+                    invalidMac: "Formato de dirección MAC inválido. Usa AA:BB:CC:DD:EE:FF",
+                    enterM3u: "Por favor ingresa una URL de lista M3U",
+                    invalidM3u: "La URL M3U debe comenzar con http:// o https://",
+                    completeCaptcha: "Por favor completa la verificación captcha",
+                    macExists: "Esta dirección MAC ya está registrada",
+                    registrationFailed: "Registro fallido. Por favor intenta de nuevo"
+                },
+                registering: "Registrando Dispositivo..."
+            },
+            fr: {
+                title: "Enregistrer l'Appareil",
+                subtitle: "Connectez votre appareil à BurgTV et profitez des services IPTV premium",
+                deviceType: "Type d'Appareil",
+                selectDevice: "Sélectionnez votre appareil...",
+                macAddress: "Adresse MAC",
+                macHint: "Trouvez dans les paramètres réseau de l'appareil",
+                deviceName: "Nom de l'Appareil (Optionnel)",
+                deviceNamePlaceholder: "TV Salon",
+                deviceNameHint: "Pour identification facile",
+                m3uUrl: "URL de la Liste M3U",
+                m3uHint: "URL de la liste de votre fournisseur IPTV",
+                epgUrl: "URL EPG (Optionnel)",
+                epgHint: "Guide Électronique des Programmes pour les horaires TV",
+                registerButton: "Enregistrer l'Appareil",
+                successTitle: "Appareil Enregistré avec Succès!",
+                successSubtitle: "Votre appareil a été enregistré et est prêt à l'emploi",
+                yourMac: "Votre Adresse MAC:",
+                macUsage: "Utilisez cette adresse MAC pour accéder au tableau de bord de votre appareil",
+                dashboardButton: "Accéder au Tableau de Bord",
+                registerAnotherButton: "Enregistrer un Autre Appareil",
+                terms: "Conditions d'Utilisation",
+                privacy: "Politique de Confidentialité",
+                errors: {
+                    selectDevice: "Veuillez sélectionner un type d'appareil",
+                    enterMac: "Veuillez entrer une adresse MAC",
+                    invalidMac: "Format d'adresse MAC invalide. Utilisez AA:BB:CC:DD:EE:FF",
+                    enterM3u: "Veuillez entrer une URL de liste M3U",
+                    invalidM3u: "L'URL M3U doit commencer par http:// ou https://",
+                    completeCaptcha: "Veuillez compléter la vérification captcha",
+                    macExists: "Cette adresse MAC est déjà enregistrée",
+                    registrationFailed: "Échec de l'enregistrement. Veuillez réessayer"
+                },
+                registering: "Enregistrement en cours..."
             }
         };
         
         let currentLang = 'en';
+        let captchaToken = null;
+        let registeredMacAddress = null;
         
-        // ===== GESTIONE FORM REGISTRAZIONE DISPOSITIVO =====
-        document.getElementById('addDeviceForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const deviceData = {
-                p_mac_address: document.getElementById('macAddress').value.trim(),
-                p_device_type: document.getElementById('deviceType').value,
-                p_device_name: document.getElementById('deviceName').value.trim() || null,
-                p_m3u_url: document.getElementById('m3uUrl').value.trim(),
-                p_epg_url: document.getElementById('epgUrl').value.trim() || null
-            };
-            
-            try {
-                // Validazione base
-                if (!/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(deviceData.p_mac_address)) {
-                    throw new Error('MAC address non valido');
-                }
-                
-                if (!deviceData.p_m3u_url.startsWith('http')) {
-                    throw new Error('URL M3U deve iniziare con http/https');
-                }
-                
-                // Chiama direttamente la funzione RPC di Supabase
-                const { data, error } = await supabase.rpc('register_device', deviceData);
-                
-                if (error) throw error;
-                
-                // Successo!
-                alert('✅ Dispositivo registrato con successo!');
-                this.reset();
-                
-                // Aggiorna contatori e lista
-                loadDevices(); 
-                
-            } catch (err) {
-                console.error('Errore:', err);
-                alert('❌ Errore: ' + (err.message || 'Registrazione fallita'));
-            }
-        });
-        
-        // ===== FUNZIONI CARICAMENTO DISPOSITIVI =====
-        async function loadDevices() {
-            try {
-                const { data, error } = await supabase.rpc('get_all_devices');
-                
-                if (error) throw error;
-                
-                if (data && data.devices) {
-                    // Aggiorna i contatori
-                    document.getElementById('totalDevices').textContent = data.devices.length;
-                    document.getElementById('activeDevices').textContent = 
-                        data.devices.filter(d => d.is_active).length;
-                    document.getElementById('totalPlaylists').textContent = 
-                        data.devices.filter(d => d.playlist_url).length;
-                    
-                    // Visualizza lista dispositivi
-                    displayDevices(data.devices);
-                }
-            } catch (err) {
-                console.error('Errore caricamento dispositivi:', err);
-                // Mostra dispositivi di esempio se non riesce a caricare
-                displayExampleDevices();
-            }
-        }
-        
-        // ===== VISUALIZZAZIONE DISPOSITIVI =====
-        function displayDevices(devices) {
-            const deviceList = document.getElementById('deviceList');
-            if (!deviceList) return;
-            
-            if (devices.length === 0) {
-                deviceList.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                        <div style="font-size: 48px; margin-bottom: 20px;">📱</div>
-                        <h3>Nessun dispositivo collegato</h3>
-                        <p>Clicca su "Aggiungi Dispositivo" per iniziare!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            deviceList.innerHTML = devices.map(device => `
-                <div class="device-card ${getDeviceClass(device.device_type)}">
-                    <div class="device-header">
-                        <div class="device-type">
-                            ${getDeviceIcon(device.device_type)} ${getDeviceDisplayName(device.device_type)}
-                        </div>
-                        <div class="status ${device.subscription_status}">
-                            ${device.subscription_status === 'trial' ? 'Trial' : 'Active'}
-                            ${device.days_remaining ? ` - ${device.days_remaining} giorni` : ''}
-                        </div>
-                    </div>
-                    <div class="device-mac">${device.mac_address}</div>
-                    <div class="device-info">
-                        <div class="device-info-item">
-                            <span class="device-info-label">Playlist:</span>
-                            <span>${device.playlist_url ? '✅ Configurata' : '❌ Mancante'}</span>
-                        </div>
-                        <div class="device-info-item">
-                            <span class="device-info-label">Nome:</span>
-                            <span>${device.device_name || 'Non specificato'}</span>
-                        </div>
-                        <div class="device-info-item">
-                            <span class="device-info-label">Ultimo accesso:</span>
-                            <span>${device.last_seen ? new Date(device.last_seen).toLocaleDateString() : 'Mai'}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function displayExampleDevices() {
-            const deviceList = document.getElementById('deviceList');
-            if (!deviceList) return;
-            
-            deviceList.innerHTML = `
-                <div class="device-card fire-tv">
-                    <div class="device-header">
-                        <div class="device-type">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9900">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12.5v9l7-4.5-7-4.5z"/>
-                            </svg>
-                            Fire TV Stick
-                        </div>
-                        <div class="status trial">Trial</div>
-                    </div>
-                    <div class="device-mac">AA:BB:CC:DD:EE:FF</div>
-                    <div class="device-info">
-                        <div class="device-info-item">
-                            <span class="device-info-label">Playlist:</span>
-                            <span>mylist.m3u</span>
-                        </div>
-                        <div class="device-info-item">
-                            <span class="device-info-label">Added:</span>
-                            <span>2 days ago</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="device-card samsung-tv">
-                    <div class="device-header">
-                        <div class="device-type">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#1428A0">
-                                <ellipse cx="12" cy="12" rx="11" ry="4.5" transform="rotate(-30 12 12)"/>
-                            </svg>
-                            Samsung TV
-                        </div>
-                        <div class="status active">Active</div>
-                    </div>
-                    <div class="device-mac">11:22:33:44:55:66</div>
-                    <div class="device-info">
-                        <div class="device-info-item">
-                            <span class="device-info-label">Playlist:</span>
-                            <span>channels.m3u</span>
-                        </div>
-                        <div class="device-info-item">
-                            <span class="device-info-label">Added:</span>
-                            <span>1 week ago</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="device-card apple-tv">
-                    <div class="device-header">
-                        <div class="device-type">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #555;">
-                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                            </svg>
-                            Apple TV
-                        </div>
-                        <div class="status active">Active</div>
-                    </div>
-                    <div class="device-mac">FF:EE:DD:CC:BB:AA</div>
-                    <div class="device-info">
-                        <div class="device-info-item">
-                            <span class="device-info-label">Playlist:</span>
-                            <span>premium.m3u</span>
-                        </div>
-                        <div class="device-info-item">
-                            <span class="device-info-label">Added:</span>
-                            <span>3 days ago</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // ===== FUNZIONI HELPER =====
-        function getDeviceIcon(type) {
-            const icons = {
-                'firetv': '<svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9900"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12.5v9l7-4.5-7-4.5z"/></svg>',
-                'samsung': '<svg width="20" height="20" viewBox="0 0 24 24" fill="#1428A0"><ellipse cx="12" cy="12" rx="11" ry="4.5" transform="rotate(-30 12 12)"/></svg>',
-                'lg': '<svg width="20" height="20" viewBox="0 0 24 24" fill="#A50034"><circle cx="8" cy="12" r="3"/><path d="M11 9h7v6h-5v-3h3"/></svg>',
-                'appletv': '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #555;"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>',
-                'android': '<svg width="20" height="20" viewBox="0 0 24 24" fill="#3DDC84"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>',
-                'ios': '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #555;"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>'
-            };
-            return icons[type] || '📺';
-        }
-        
-        function getDeviceClass(type) {
-            const classes = {
-                'firetv': 'fire-tv',
-                'samsung': 'samsung-tv',
-                'lg': 'lg-tv',
-                'appletv': 'apple-tv',
-                'android': 'android-tv',
-                'ios': 'apple-tv'
-            };
-            return classes[type] || '';
-        }
-        
-        function getDeviceDisplayName(type) {
-            const names = {
-                'firetv': 'Fire TV Stick',
-                'samsung': 'Samsung TV',
-                'lg': 'LG TV',
-                'appletv': 'Apple TV',
-                'android': 'Android TV',
-                'ios': 'iPhone/iPad'
-            };
-            return names[type] || type;
-        }
-        
-        // ===== GESTIONE LINGUA =====
-        function setLanguage(lang) {
+        // ===== LANGUAGE FUNCTIONS =====
+        function changeLanguage(lang) {
             currentLang = lang;
+            localStorage.setItem('preferredLanguage', lang);
             
-            // Aggiorna bottoni
+            // Update active button
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
             
-            // Aggiorna testi
-            document.querySelectorAll('[data-lang]').forEach(element => {
-                const key = element.getAttribute('data-lang');
-                if (translations[lang][key]) {
-                    element.textContent = translations[lang][key];
-                }
-            });
+            // Update texts
+            updateTexts();
             
-            // Salva preferenza
-            localStorage.setItem('preferredLang', lang);
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+            
+            // Update footer links
+            const footerLinks = document.querySelectorAll('.footer a');
+            footerLinks[0].href = `/legal/terms-${lang}.html`;
+            footerLinks[1].href = `/legal/privacy-${lang}.html`;
         }
         
-        // ===== GESTIONE TAB =====
-        function switchTab(tabName, element) {
-            // Nascondi tutti i pannelli
-            document.querySelectorAll('.panel').forEach(panel => {
-                panel.classList.remove('active');
+        function updateTexts() {
+            const t = translations[currentLang];
+            
+            // Update all elements with data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const keys = key.split('.');
+                let value = t;
+                for (const k of keys) {
+                    value = value[k];
+                }
+                if (value) el.textContent = value;
             });
             
-            // Rimuovi active da tutti i tab
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
+            // Update placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
             });
-            
-            // Mostra pannello selezionato
-            document.getElementById(tabName).classList.add('active');
-            element.classList.add('active');
         }
+        
+        // ===== GESTIONE CAPTCHA =====
+        window.onRegisterCaptcha = function(token) {
+            captchaToken = token;
+        };
+        
+        // ===== FUNZIONI UI =====
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            const icons = {
+                error: '❌',
+                success: '✅',
+                info: 'ℹ️'
+            };
+            
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    <span>${icons[type]}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+        
+        function setLoading(loading) {
+            const btn = document.getElementById('submitBtn');
+            const form = document.getElementById('deviceForm');
+            const t = translations[currentLang];
+            
+            if (loading) {
+                btn.disabled = true;
+                form.style.pointerEvents = 'none';
+                btn.innerHTML = `
+                    <span class="loading"></span>
+                    <span>${t.registering}</span>
+                `;
+            } else {
+                btn.disabled = false;
+                form.style.pointerEvents = 'auto';
+                btn.innerHTML = `
+                    <span>💾</span>
+                    <span>${t.registerButton}</span>
+                `;
+            }
+        }
+        
+        function resetCaptcha() {
+            captchaToken = null;
+            if (window.hcaptcha) {
+                window.hcaptcha.reset();
+            }
+        }
+        
+        function showSuccess(macAddress) {
+            document.getElementById('registrationForm').style.display = 'none';
+            document.getElementById('successState').classList.add('show');
+            document.getElementById('registeredMac').textContent = macAddress;
+            registeredMacAddress = macAddress;
+        }
+        
+        function goToDashboard() {
+            if (registeredMacAddress) {
+                window.location.href = `/dashboard.html?mac=${registeredMacAddress}`;
+            }
+        }
+        
+        function registerAnother() {
+            // Reset form
+            document.getElementById('deviceForm').reset();
+            document.getElementById('deviceTypeDisplay').value = '';
+            document.getElementById('deviceType').value = '';
+            document.getElementById('alertContainer').innerHTML = '';
+            resetCaptcha();
+            
+            // Show registration form
+            document.getElementById('successState').classList.remove('show');
+            document.getElementById('registrationForm').style.display = 'block';
+            
+            // Focus on first input
+            document.getElementById('deviceTypeDisplay').focus();
+        }
+        
+        // ===== GESTIONE SELECT DISPOSITIVI =====
+        function toggleDeviceOptions() {
+            const options = document.getElementById('deviceOptions');
+            options.classList.toggle('show');
+        }
+        
+        function selectDevice(value, element) {
+            const displayInput = document.getElementById('deviceTypeDisplay');
+            const hiddenInput = document.getElementById('deviceType');
+            const options = document.getElementById('deviceOptions');
+            
+            // Rimuovi selezione precedente
+            document.querySelectorAll('.device-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Seleziona nuovo dispositivo
+            element.classList.add('selected');
+            displayInput.value = element.querySelector('.device-name').textContent;
+            hiddenInput.value = value;
+            
+            // Chiudi dropdown
+            options.classList.remove('show');
+            
+            // Focus su MAC address
+            document.getElementById('macAddress').focus();
+        }
+        
+        // Chiudi dropdown quando si clicca fuori
+        document.addEventListener('click', function(e) {
+            const wrapper = document.querySelector('.device-select-wrapper');
+            const options = document.getElementById('deviceOptions');
+            
+            if (!wrapper.contains(e.target)) {
+                options.classList.remove('show');
+            }
+        });
+        
+        // ===== VALIDAZIONE E FORMATTING =====
+        function formatMacAddress(input) {
+            let value = input.value.replace(/[^A-Fa-f0-9]/g, '').toUpperCase();
+            if (value.length > 12) {
+                value = value.substring(0, 12);
+            }
+            
+            // Add colons
+            const formatted = value.match(/.{1,2}/g)?.join(':') || value;
+            if (formatted !== input.value) {
+                input.value = formatted;
+            }
+        }
+        
+        function validateForm() {
+            const deviceType = document.getElementById('deviceType').value;
+            const macAddress = document.getElementById('macAddress').value;
+            const m3uUrl = document.getElementById('m3uUrl').value;
+            const t = translations[currentLang].errors;
+            
+            if (!deviceType) {
+                showAlert(t.selectDevice, 'error');
+                return false;
+            }
+            
+            if (!macAddress) {
+                showAlert(t.enterMac, 'error');
+                return false;
+            }
+            
+            if (!/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(macAddress)) {
+                showAlert(t.invalidMac, 'error');
+                return false;
+            }
+            
+            if (!m3uUrl) {
+                showAlert(t.enterM3u, 'error');
+                return false;
+            }
+            
+            if (!m3uUrl.startsWith('http')) {
+                showAlert(t.invalidM3u, 'error');
+                return false;
+            }
+            
+            if (!captchaToken) {
+                showAlert(t.completeCaptcha, 'error');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // ===== GESTIONE FORM =====
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            setLoading(true);
+            
+            const formData = {
+                p_device_type: document.getElementById('deviceType').value,
+                p_mac_address: document.getElementById('macAddress').value.toUpperCase(),
+                p_device_name: document.getElementById('deviceName').value.trim() || null,
+                p_m3u_url: document.getElementById('m3uUrl').value.trim(),
+                p_epg_url: document.getElementById('epgUrl').value.trim() || null,
+                p_captcha_token: captchaToken
+            };
+            
+            try {
+                // Chiama la funzione RPC per registrare il dispositivo
+                const { data, error } = await supabase.rpc('register_device', formData);
+                
+                if (error) {
+                    throw error;
+                }
+                
+                if (data && data.success) {
+                    showSuccess(formData.p_mac_address);
+                } else {
+                    throw new Error(data.error || 'Registration failed');
+                }
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                showAlert(getErrorMessage(error), 'error');
+                resetCaptcha();
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        function getErrorMessage(error) {
+            const t = translations[currentLang].errors;
+            const errorMessages = {
+                'MAC address already exists': t.macExists,
+                'duplicate key value violates unique constraint': t.macExists,
+            };
+            
+            return errorMessages[error.message] || error.message || t.registrationFailed;
+        }
+        
+        // ===== EVENT LISTENERS =====
+        document.getElementById('deviceForm').addEventListener('submit', handleSubmit);
+        
+        // Format MAC address on input
+        document.getElementById('macAddress').addEventListener('input', function(e) {
+            formatMacAddress(e.target);
+        });
         
         // ===== INIZIALIZZAZIONE =====
         document.addEventListener('DOMContentLoaded', function() {
-            // Carica lingua salvata
-            const savedLang = localStorage.getItem('preferredLang') || 'en';
+            // Load preferred language
+            const savedLang = localStorage.getItem('preferredLanguage') || 'en';
             if (savedLang !== 'en') {
                 currentLang = savedLang;
-                document.querySelector(`.lang-btn[onclick*="${savedLang}"]`).click();
+                document.querySelector(`.lang-btn[onclick*="${savedLang}"]`).classList.add('active');
+                document.querySelector('.lang-btn[onclick*="en"]').classList.remove('active');
+                updateTexts();
             }
             
-            // Carica dispositivi
-            loadDevices();
-            
-            // Simula dispositivi attivi (aggiornamento periodico)
-            setInterval(() => {
-                const currentActive = parseInt(document.getElementById('activeDevices').textContent);
-                if (currentActive > 0) {
-                    const variation = Math.floor(Math.random() * 3) - 1; // -1, 0, o +1
-                    const newActive = Math.max(0, Math.min(currentActive + variation, parseInt(document.getElementById('totalDevices').textContent)));
-                    document.getElementById('activeDevices').textContent = newActive;
-                }
-            }, 15000); // Ogni 15 secondi
+            // Focus on device type selector
+            document.getElementById('deviceTypeDisplay').focus();
         });
         
-        // Rendi le funzioni globali per gli onclick
-        window.setLanguage = setLanguage;
-        window.switchTab = switchTab;
+        // Make functions global for onclick handlers
+        window.toggleDeviceOptions = toggleDeviceOptions;
+        window.selectDevice = selectDevice;
+        window.goToDashboard = goToDashboard;
+        window.registerAnother = registerAnother;
+        window.changeLanguage = changeLanguage;
     </script>
 </body>
 </html>
