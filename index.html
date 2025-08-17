@@ -587,12 +587,12 @@
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-icon">📊</div>
-                <div class="stat-number" id="totalDevices">3</div>
+                <div class="stat-number" id="totalDevices">0</div>
                 <div class="stat-label" data-lang="total-devices">Total Devices</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🟢</div>
-                <div class="stat-number" id="activeDevices">2</div>
+                <div class="stat-number" id="activeDevices">0</div>
                 <div class="stat-label" data-lang="active-now">Active Now</div>
             </div>
             <div class="stat-card">
@@ -602,7 +602,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-icon">📋</div>
-                <div class="stat-number" id="totalPlaylists">2</div>
+                <div class="stat-number" id="totalPlaylists">0</div>
                 <div class="stat-label" data-lang="playlists">Playlists</div>
             </div>
         </div>
@@ -631,78 +631,8 @@
         <div id="devices" class="panel active">
             <div class="card">
                 <h2><span>🔌</span> <span data-lang="your-devices">Your Devices</span></h2>
-                <div class="device-grid">
-                    <!-- Fire TV -->
-                    <div class="device-card">
-                        <div class="device-header">
-                            <div class="device-type">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9900">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12.5v9l7-4.5-7-4.5z"/>
-                                </svg>
-                                Fire TV Stick
-                            </div>
-                            <div class="status trial" data-lang="status-trial">Trial</div>
-                        </div>
-                        <div class="device-mac">AA:BB:CC:DD:EE:FF</div>
-                        <div class="device-info">
-                            <div class="device-info-item">
-                                <span class="device-info-label" data-lang="playlist">Playlist:</span>
-                                <span>mylist.m3u</span>
-                            </div>
-                            <div class="device-info-item">
-                                <span class="device-info-label" data-lang="added">Added:</span>
-                                <span>2 days ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Samsung TV -->
-                    <div class="device-card">
-                        <div class="device-header">
-                            <div class="device-type">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1428A0">
-                                    <ellipse cx="12" cy="12" rx="11" ry="4.5" transform="rotate(-30 12 12)"/>
-                                </svg>
-                                Samsung TV
-                            </div>
-                            <div class="status active" data-lang="status-active">Active</div>
-                        </div>
-                        <div class="device-mac">11:22:33:44:55:66</div>
-                        <div class="device-info">
-                            <div class="device-info-item">
-                                <span class="device-info-label" data-lang="playlist">Playlist:</span>
-                                <span>channels.m3u</span>
-                            </div>
-                            <div class="device-info-item">
-                                <span class="device-info-label" data-lang="added">Added:</span>
-                                <span>1 week ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Apple TV -->
-                    <div class="device-card">
-                        <div class="device-header">
-                            <div class="device-type">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #555;">
-                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                                </svg>
-                                Apple TV
-                            </div>
-                            <div class="status active" data-lang="status-active">Active</div>
-                        </div>
-                        <div class="device-mac">FF:EE:DD:CC:BB:AA</div>
-                        <div class="device-info">
-                            <div class="device-info-item">
-                                <span class="device-info-label" data-lang="playlist">Playlist:</span>
-                                <span>premium.m3u</span>
-                            </div>
-                            <div class="device-info-item">
-                                <span class="device-info-label" data-lang="added">Added:</span>
-                                <span>3 days ago</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="device-grid" id="deviceList">
+                    <!-- I dispositivi verranno caricati dinamicamente da Supabase -->
                 </div>
             </div>
         </div>
@@ -864,8 +794,17 @@
         </div>
     </div>
     
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Language translations
+        // ===== CONFIGURAZIONE SUPABASE =====
+        const SUPABASE_URL = 'https://ugspmqfduabfmfsoxqoc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3BtcWZkdWFiZm1mc294cW9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyODY0NjEsImV4cCI6MjA3MDg2MjQ2MX0.euDiQhUl4NJbuVeClfunDV8wVaWITK_UNLrdZeMYKC0';
+        
+        // Inizializza Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // ===== TRADUZIONI =====
         const translations = {
             en: {
                 'total-devices': 'Total Devices',
@@ -953,17 +892,241 @@
         
         let currentLang = 'en';
         
-        // Language switcher
+        // ===== GESTIONE FORM REGISTRAZIONE DISPOSITIVO =====
+        document.getElementById('addDeviceForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const deviceData = {
+                p_mac_address: document.getElementById('macAddress').value.trim(),
+                p_device_type: document.getElementById('deviceType').value,
+                p_device_name: document.getElementById('deviceName').value.trim() || null,
+                p_m3u_url: document.getElementById('m3uUrl').value.trim(),
+                p_epg_url: document.getElementById('epgUrl').value.trim() || null
+            };
+            
+            try {
+                // Validazione base
+                if (!/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(deviceData.p_mac_address)) {
+                    throw new Error('MAC address non valido');
+                }
+                
+                if (!deviceData.p_m3u_url.startsWith('http')) {
+                    throw new Error('URL M3U deve iniziare con http/https');
+                }
+                
+                // Chiama direttamente la funzione RPC di Supabase
+                const { data, error } = await supabase.rpc('register_device', deviceData);
+                
+                if (error) throw error;
+                
+                // Successo!
+                alert('✅ Dispositivo registrato con successo!');
+                this.reset();
+                
+                // Aggiorna contatori e lista
+                loadDevices(); 
+                
+            } catch (err) {
+                console.error('Errore:', err);
+                alert('❌ Errore: ' + (err.message || 'Registrazione fallita'));
+            }
+        });
+        
+        // ===== FUNZIONI CARICAMENTO DISPOSITIVI =====
+        async function loadDevices() {
+            try {
+                const { data, error } = await supabase.rpc('get_all_devices');
+                
+                if (error) throw error;
+                
+                if (data && data.devices) {
+                    // Aggiorna i contatori
+                    document.getElementById('totalDevices').textContent = data.devices.length;
+                    document.getElementById('activeDevices').textContent = 
+                        data.devices.filter(d => d.is_active).length;
+                    document.getElementById('totalPlaylists').textContent = 
+                        data.devices.filter(d => d.playlist_url).length;
+                    
+                    // Visualizza lista dispositivi
+                    displayDevices(data.devices);
+                }
+            } catch (err) {
+                console.error('Errore caricamento dispositivi:', err);
+                // Mostra dispositivi di esempio se non riesce a caricare
+                displayExampleDevices();
+            }
+        }
+        
+        // ===== VISUALIZZAZIONE DISPOSITIVI =====
+        function displayDevices(devices) {
+            const deviceList = document.getElementById('deviceList');
+            if (!deviceList) return;
+            
+            if (devices.length === 0) {
+                deviceList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">📱</div>
+                        <h3>Nessun dispositivo collegato</h3>
+                        <p>Clicca su "Aggiungi Dispositivo" per iniziare!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            deviceList.innerHTML = devices.map(device => `
+                <div class="device-card ${getDeviceClass(device.device_type)}">
+                    <div class="device-header">
+                        <div class="device-type">
+                            ${getDeviceIcon(device.device_type)} ${getDeviceDisplayName(device.device_type)}
+                        </div>
+                        <div class="status ${device.subscription_status}">
+                            ${device.subscription_status === 'trial' ? 'Trial' : 'Active'}
+                            ${device.days_remaining ? ` - ${device.days_remaining} giorni` : ''}
+                        </div>
+                    </div>
+                    <div class="device-mac">${device.mac_address}</div>
+                    <div class="device-info">
+                        <div class="device-info-item">
+                            <span class="device-info-label">Playlist:</span>
+                            <span>${device.playlist_url ? '✅ Configurata' : '❌ Mancante'}</span>
+                        </div>
+                        <div class="device-info-item">
+                            <span class="device-info-label">Nome:</span>
+                            <span>${device.device_name || 'Non specificato'}</span>
+                        </div>
+                        <div class="device-info-item">
+                            <span class="device-info-label">Ultimo accesso:</span>
+                            <span>${device.last_seen ? new Date(device.last_seen).toLocaleDateString() : 'Mai'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function displayExampleDevices() {
+            const deviceList = document.getElementById('deviceList');
+            if (!deviceList) return;
+            
+            deviceList.innerHTML = `
+                <div class="device-card fire-tv">
+                    <div class="device-header">
+                        <div class="device-type">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9900">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12.5v9l7-4.5-7-4.5z"/>
+                            </svg>
+                            Fire TV Stick
+                        </div>
+                        <div class="status trial">Trial</div>
+                    </div>
+                    <div class="device-mac">AA:BB:CC:DD:EE:FF</div>
+                    <div class="device-info">
+                        <div class="device-info-item">
+                            <span class="device-info-label">Playlist:</span>
+                            <span>mylist.m3u</span>
+                        </div>
+                        <div class="device-info-item">
+                            <span class="device-info-label">Added:</span>
+                            <span>2 days ago</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="device-card samsung-tv">
+                    <div class="device-header">
+                        <div class="device-type">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#1428A0">
+                                <ellipse cx="12" cy="12" rx="11" ry="4.5" transform="rotate(-30 12 12)"/>
+                            </svg>
+                            Samsung TV
+                        </div>
+                        <div class="status active">Active</div>
+                    </div>
+                    <div class="device-mac">11:22:33:44:55:66</div>
+                    <div class="device-info">
+                        <div class="device-info-item">
+                            <span class="device-info-label">Playlist:</span>
+                            <span>channels.m3u</span>
+                        </div>
+                        <div class="device-info-item">
+                            <span class="device-info-label">Added:</span>
+                            <span>1 week ago</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="device-card apple-tv">
+                    <div class="device-header">
+                        <div class="device-type">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #555;">
+                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                            </svg>
+                            Apple TV
+                        </div>
+                        <div class="status active">Active</div>
+                    </div>
+                    <div class="device-mac">FF:EE:DD:CC:BB:AA</div>
+                    <div class="device-info">
+                        <div class="device-info-item">
+                            <span class="device-info-label">Playlist:</span>
+                            <span>premium.m3u</span>
+                        </div>
+                        <div class="device-info-item">
+                            <span class="device-info-label">Added:</span>
+                            <span>3 days ago</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // ===== FUNZIONI HELPER =====
+        function getDeviceIcon(type) {
+            const icons = {
+                'firetv': '<svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9900"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12.5v9l7-4.5-7-4.5z"/></svg>',
+                'samsung': '<svg width="20" height="20" viewBox="0 0 24 24" fill="#1428A0"><ellipse cx="12" cy="12" rx="11" ry="4.5" transform="rotate(-30 12 12)"/></svg>',
+                'lg': '<svg width="20" height="20" viewBox="0 0 24 24" fill="#A50034"><circle cx="8" cy="12" r="3"/><path d="M11 9h7v6h-5v-3h3"/></svg>',
+                'appletv': '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #555;"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>',
+                'android': '<svg width="20" height="20" viewBox="0 0 24 24" fill="#3DDC84"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>',
+                'ios': '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #555;"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>'
+            };
+            return icons[type] || '📺';
+        }
+        
+        function getDeviceClass(type) {
+            const classes = {
+                'firetv': 'fire-tv',
+                'samsung': 'samsung-tv',
+                'lg': 'lg-tv',
+                'appletv': 'apple-tv',
+                'android': 'android-tv',
+                'ios': 'apple-tv'
+            };
+            return classes[type] || '';
+        }
+        
+        function getDeviceDisplayName(type) {
+            const names = {
+                'firetv': 'Fire TV Stick',
+                'samsung': 'Samsung TV',
+                'lg': 'LG TV',
+                'appletv': 'Apple TV',
+                'android': 'Android TV',
+                'ios': 'iPhone/iPad'
+            };
+            return names[type] || type;
+        }
+        
+        // ===== GESTIONE LINGUA =====
         function setLanguage(lang) {
             currentLang = lang;
             
-            // Update buttons
+            // Aggiorna bottoni
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
             
-            // Update texts
+            // Aggiorna testi
             document.querySelectorAll('[data-lang]').forEach(element => {
                 const key = element.getAttribute('data-lang');
                 if (translations[lang][key]) {
@@ -971,84 +1134,53 @@
                 }
             });
             
-            // Save preference
+            // Salva preferenza
             localStorage.setItem('preferredLang', lang);
         }
         
-        // Tab switching
+        // ===== GESTIONE TAB =====
         function switchTab(tabName, element) {
-            // Hide all panels
+            // Nascondi tutti i pannelli
             document.querySelectorAll('.panel').forEach(panel => {
                 panel.classList.remove('active');
             });
             
-            // Remove active from all tabs
+            // Rimuovi active da tutti i tab
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // Show selected panel
+            // Mostra pannello selezionato
             document.getElementById(tabName).classList.add('active');
             element.classList.add('active');
         }
         
-        // Load saved devices
-        function loadDevices() {
-            const devices = JSON.parse(localStorage.getItem('devices') || '[]');
-            document.getElementById('totalDevices').textContent = devices.length || 3;
-            document.getElementById('totalPlaylists').textContent = devices.filter(d => d.m3uUrl).length || 2;
-        }
-        
-        // Add device form
-        document.getElementById('addDeviceForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const device = {
-                type: document.getElementById('deviceType').value,
-                mac: document.getElementById('macAddress').value,
-                m3uUrl: document.getElementById('m3uUrl').value,
-                epgUrl: document.getElementById('epgUrl').value,
-                name: document.getElementById('deviceName').value,
-                status: 'trial',
-                createdAt: new Date().toISOString()
-            };
-            
-            // Save to localStorage
-            const devices = JSON.parse(localStorage.getItem('devices') || '[]');
-            devices.push(device);
-            localStorage.setItem('devices', JSON.stringify(devices));
-            
-            // Show success
-            alert(currentLang === 'it' ? '✅ Dispositivo aggiunto con successo!' : '✅ Device added successfully!');
-            
-            // Reset form
-            this.reset();
-            
-            // Reload devices
-            loadDevices();
-            
-            // Switch to devices tab
-            document.querySelector('.tab').click();
-        });
-        
-        // Initialize
+        // ===== INIZIALIZZAZIONE =====
         document.addEventListener('DOMContentLoaded', function() {
-            // Load saved language
+            // Carica lingua salvata
             const savedLang = localStorage.getItem('preferredLang') || 'en';
             if (savedLang !== 'en') {
                 currentLang = savedLang;
                 document.querySelector(`.lang-btn[onclick*="${savedLang}"]`).click();
             }
             
-            // Load devices
+            // Carica dispositivi
             loadDevices();
             
-            // Simulate active devices
+            // Simula dispositivi attivi (aggiornamento periodico)
             setInterval(() => {
-                const active = Math.floor(Math.random() * 3) + 1;
-                document.getElementById('activeDevices').textContent = active;
-            }, 5000);
+                const currentActive = parseInt(document.getElementById('activeDevices').textContent);
+                if (currentActive > 0) {
+                    const variation = Math.floor(Math.random() * 3) - 1; // -1, 0, o +1
+                    const newActive = Math.max(0, Math.min(currentActive + variation, parseInt(document.getElementById('totalDevices').textContent)));
+                    document.getElementById('activeDevices').textContent = newActive;
+                }
+            }, 15000); // Ogni 15 secondi
         });
+        
+        // Rendi le funzioni globali per gli onclick
+        window.setLanguage = setLanguage;
+        window.switchTab = switchTab;
     </script>
 </body>
 </html>
