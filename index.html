@@ -5,180 +5,185 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BurgTV – Portale</title>
   <link rel="icon" href="/favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Pacifico&display=swap" rel="stylesheet">
   
   <style>
-    /* Stili Globali */
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#0b0b0c;color:#fff;font-family:Inter,system-ui,Arial,sans-serif;line-height:1.8}
-    
-    /* --- INIZIO: Stili per il Menu --- */
-
-    /* Variabili Colore */
+    /* --- INIZIO: Stili corretti presi da INDEX.HTML --- */
+    *{box-sizing:border-box}html,body{height:100%}
     :root{
-      --bg:#0b0b0c;
-      --text:#fff;
-      --muted:#c9c9d1;
-      --accent:#B94A8E;
-      --accent2:#7B4397;
-      --border:rgba(255,255,255,.12);
-      --violet:#8a2be2;
-      --ink:#0a0a14;
+        --violet:#8a2be2;
+        --mag:#f00078;
+        --ink:#0a0a14;
+        --ink2:#151424;
+        --text:#eef1f8;
+        --muted:#cbd2e6;
+        --card:#1b1a2d
     }
-
+    body{
+        margin:0;
+        font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+        background:var(--ink);
+        color:var(--text)
+    }
+    
     /* Header di Navigazione */
     .nav{
-      position:sticky;
-      top:0;
-      background:rgba(10,10,20,.95);
-      backdrop-filter:blur(10px);
-      border-bottom:1px solid var(--border);
-      z-index:100;
-      padding:0 20px
+        position:sticky;
+        top:0;
+        background:rgba(10,10,20,.95);
+        backdrop-filter:saturate(140%) blur(10px);
+        border-bottom:1px solid rgba(255,255,255,.06);
+        z-index:100;
     }
     .nav-inner{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      height:72px;
-      max-width:1120px;
-      margin:0 auto
-    }
-    .nav-left{
-      display:flex;
-      align-items:center;
-      gap:16px
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        height:72px;
+        width:min(1120px,calc(100% - 32px));
+        margin:0 auto;
+        position:relative;
     }
     .brand{
-      display:flex;
-      align-items:center;
-      text-decoration:none;
-      color:#fff
+        display:flex;
+        align-items:center;
+        gap:12px;
+        color:#fff;
+        text-decoration:none
     }
-    .brand img{
-      height:48px;
-      width:auto
+    .brand-icon{
+        width:auto;
+        height:56px
     }
-
+    
     /* Pulsante Hamburger */
     .menu-toggle{
-      background:transparent;
-      border:none;
-      cursor:pointer;
-      padding:8px;
-      display:flex;
-      flex-direction:column;
-      gap:5px
+        background:transparent;
+        border:none;
+        cursor:pointer;
+        padding:8px;
+        display:flex;
+        flex-direction:column;
+        gap:5px;
+        margin-right:16px
     }
     .menu-toggle span{
-      display:block;
-      width:28px;
-      height:3px;
-      background:var(--text);
-      border-radius:2px;
-      transition:all 0.3s ease
+        display:block;
+        width:28px;
+        height:3px;
+        background:var(--text);
+        border-radius:2px;
+        transition:all 0.3s ease
     }
     .menu-toggle.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px)}
     .menu-toggle.active span:nth-child(2){opacity:0}
     .menu-toggle.active span:nth-child(3){transform:rotate(-45deg) translate(7px,-8px)}
-
+    
     /* Sidebar Menu */
     .sidebar{
-      position:fixed;
-      top:0;
-      left:-320px;
-      width:300px;
-      height:100vh;
-      background:rgba(15,15,25,0.98);
-      backdrop-filter:blur(20px);
-      border-right:1px solid rgba(255,255,255,.08);
-      transition:left 0.3s ease;
-      z-index:99;
-      overflow-y:auto
+        position:fixed;
+        top:0;
+        left:-320px;
+        width:300px;
+        height:100vh;
+        background:rgba(15,15,25,0.98);
+        backdrop-filter:blur(20px);
+        border-right:1px solid rgba(255,255,255,.08);
+        transition:left 0.3s ease;
+        z-index:99;
+        overflow-y:auto
     }
     .sidebar.active{left:0}
+    
     .sidebar-header{
-      padding:20px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      display:flex;
-      align-items:center;
-      gap:12px
+        padding:20px;
+        border-bottom:1px solid rgba(255,255,255,.08);
+        display:flex;
+        align-items:center;
+        gap:12px
     }
     .sidebar-logo{height:40px;width:auto}
+    
     .sidebar-nav{padding:20px 0}
     .sidebar-nav a{
-      display:flex;
-      align-items:center;
-      padding:16px 24px;
-      color:var(--text);
-      text-decoration:none;
-      font-size:16px;
-      transition:all 0.3s ease;
-      border-left:3px solid transparent
+        display:flex;
+        align-items:center;
+        padding:16px 24px;
+        color:var(--text);
+        text-decoration:none;
+        font-size:16px;
+        transition:all 0.3s ease;
+        border-left:3px solid transparent
     }
     .sidebar-nav a:hover{
-      background:rgba(255,255,255,.05);
-      border-left-color:var(--violet)
+        background:rgba(255,255,255,.05);
+        border-left-color:var(--violet)
     }
     .sidebar-nav a.active{
-      background:rgba(138,43,226,.1);
-      border-left-color:var(--violet);
-      color:#fff
+        background:rgba(138,43,226,.1);
+        border-left-color:var(--violet);
+        color:#fff
     }
     .sidebar-nav a span{margin-right:12px;font-size:20px}
     .sidebar-divider{
-      height:1px;
-      background:rgba(255,255,255,.08);
-      margin:10px 20px
+        height:1px;
+        background:rgba(255,255,255,.08);
+        margin:10px 20px
     }
-
+    
     /* Overlay */
     .sidebar-overlay{
-      position:fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background:rgba(0,0,0,0.5);
-      display:none;
-      z-index:98
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+        display:none;
+        z-index:98
     }
     .sidebar-overlay.active{display:block}
-
+    
     /* Selettore Lingua */
     .lang-switch{display:flex;gap:8px}
     .lang-switch button{
-      background:transparent;
-      border:1px solid var(--border);
-      color:var(--muted);
-      padding:6px 12px;
-      border-radius:8px;
-      cursor:pointer;
-      font-size:14px;
-      transition:all 0.3s ease
+        background:transparent;
+        border:1px solid rgba(255,255,255,.2);
+        color:#fff;
+        border-radius:12px;
+        padding:6px 12px;
+        cursor:pointer;
+        font-size:14px;
+        transition:all 0.3s ease
     }
     .lang-switch button.active{
-      border-color:var(--accent);
-      background:rgba(185,74,142,.1);
-      color:#fff
+        background:rgba(255,255,255,.1);
+        border-color:#fff
     }
     /* --- FINE: Stili per il Menu --- */
 
-    /* Stile per il contenuto principale (esempio) */
+    /* Stili per il contenuto di esempio */
     .main-content {
-        max-width: 1120px;
-        margin: 0 auto;
-        padding: 40px 20px;
+        width:min(1120px,calc(100% - 32px));
+        margin:0 auto;
+        padding: 40px 0;
     }
-    .main-content h1 {
+    .card-example {
+        background: var(--card);
+        border: 1px solid rgba(255, 255, 255, .06);
+        border-radius: 14px;
+        padding: 24px;
+    }
+    .card-example h1 {
         font-size: 2rem;
-        color: #fff;
+        color: var(--text);
+        margin: 0 0 10px;
     }
-    .main-content p {
+    .card-example p {
         color: var(--muted);
         font-size: 1.1rem;
+        line-height: 1.6;
     }
-
   </style>
 </head>
 <body>
@@ -188,11 +193,15 @@
       <img src="assets/branding/logo.svg" class="sidebar-logo" alt="Burg IPTV"/>
     </div>
     <nav class="sidebar-nav">
-      <a href="https://app.burgtv.com">
+      <a href="/">
+        <span>🏠</span>
+        <span data-i18n="menu.home">Home</span>
+      </a>
+      <a href="#" class="active">
         <span>📺</span>
         <span data-i18n="menu.portal">Portale Dispositivi</span>
       </a>
-      <a href="https://app.burgtv.com">
+      <a href="#">
         <span>📋</span>
         <span data-i18n="menu.mylist">Le Mie Liste</span>
       </a>
@@ -216,29 +225,33 @@
 
   <header class="nav">
     <div class="nav-inner">
-      <div class="nav-left">
+      <div style="display:flex; align-items:center;">
         <button class="menu-toggle" id="menuToggle" aria-label="Menu">
           <span></span>
           <span></span>
           <span></span>
         </button>
         <a class="brand" href="/">
-          <img src="assets/branding/logo.svg" alt="Burg IPTV logo"/>
+          <img src="assets/branding/logo.svg" class="brand-icon" alt="Burg IPTV logo"/>
         </a>
       </div>
       <div class="lang-switch">
-        <button id="btn-it" class="active">IT</button>
-        <button id="btn-en">EN</button>
-        <button id="btn-de">DE</button>
-        <button id="btn-es">ES</button>
-        <button id="btn-fr">FR</button>
+        <button id="btn-it" class="active" aria-label="Italiano">IT</button>
+        <button id="btn-en" aria-label="English">EN</button>
+        <button id="btn-de" aria-label="Deutsch">DE</button>
+        <button id="btn-es" aria-label="Español">ES</button>
+        <button id="btn-fr" aria-label="Français">FR</button>
       </div>
     </div>
   </header>
+
   <main class="main-content">
     
-    <h1>Benvenuto nel tuo Portale</h1>
-    <p>Qui puoi gestire i tuoi dispositivi e le tue playlist.</p>
+    <div class="card-example">
+        <h1>Portale Dispositivi</h1>
+        <p>Benvenuto nell'area di gestione. Da qui puoi caricare la tua playlist M3U o collegare un dispositivo tramite l'indirizzo MAC.</p>
+        <p>Usa il menu in alto a sinistra per navigare tra le sezioni.</p>
+    </div>
     </main>
 
   <script>
@@ -259,6 +272,7 @@
     // --- Gestione Cambio Lingua ---
     const menuTranslations = {
       it: {
+        "menu.home": "Home",
         "menu.portal": "Portale Dispositivi",
         "menu.mylist": "Le Mie Liste",
         "menu.terms": "Termini di Servizio",
@@ -266,6 +280,7 @@
         "menu.contact": "Contatti"
       },
       en: {
+        "menu.home": "Home",
         "menu.portal": "Device Portal",
         "menu.mylist": "My Lists",
         "menu.terms": "Terms of Service",
@@ -273,6 +288,7 @@
         "menu.contact": "Contact"
       },
       de: {
+        "menu.home": "Startseite",
         "menu.portal": "Geräte-Portal",
         "menu.mylist": "Meine Listen",
         "menu.terms": "Nutzungsbedingungen",
@@ -280,6 +296,7 @@
         "menu.contact": "Kontakt"
       },
       es: {
+        "menu.home": "Inicio",
         "menu.portal": "Portal de Dispositivos",
         "menu.mylist": "Mis Listas",
         "menu.terms": "Términos de Servicio",
@@ -287,6 +304,7 @@
         "menu.contact": "Contacto"
       },
       fr: {
+        "menu.home": "Accueil",
         "menu.portal": "Portail des Appareils",
         "menu.mylist": "Mes Listes",
         "menu.terms": "Conditions d'Utilisation",
@@ -323,5 +341,6 @@
     const savedLang = localStorage.getItem('preferredLang') || 'it';
     setLanguage(savedLang);
   </script>
-  </body>
+
+</body>
 </html>
