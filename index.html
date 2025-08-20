@@ -731,28 +731,28 @@
             <img src="logo.svg" class="sidebar-logo" alt="BurgTV"/>
         </div>
         <nav class="sidebar-nav">
-            <a href="/" class="active">
+            <a href="https://burgtv.com">
                 <span>🏠</span>
                 <span data-i18n="menu.home">Home</span>
             </a>
-            <a href="/">
+            <a href="/" class="active">
                 <span>📺</span>
                 <span data-i18n="menu.portal">Device Portal</span>
             </a>
-            <a href="/">
+            <a href="https://app.burgtv.com">
                 <span>📋</span>
                 <span data-i18n="menu.mylist">My Lists</span>
             </a>
             <div class="sidebar-divider"></div>
-            <a href="#features">
+            <a href="https://burgtv.com#features">
                 <span>✨</span>
                 <span data-i18n="menu.features">Features</span>
             </a>
-            <a href="#devices">
+            <a href="https://burgtv.com#devices">
                 <span>📱</span>
                 <span data-i18n="menu.devices">Devices</span>
             </a>
-            <a href="#faq">
+            <a href="https://burgtv.com#faq">
                 <span>❓</span>
                 <span data-i18n="menu.faq">FAQ</span>
             </a>
@@ -1210,7 +1210,7 @@
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            document.getElementById('btn-' + lang).classList.add('active');
             
             // Update texts
             updateTexts();
@@ -1220,22 +1220,36 @@
             
             // Update footer links
             const footerLinks = document.querySelectorAll('.footer a');
-            footerLinks[0].href = `/legal/terms-${lang}.html`;
-            footerLinks[1].href = `/legal/privacy-${lang}.html`;
+            if (footerLinks[0]) footerLinks[0].href = `/legal/terms-${lang}.html`;
+            if (footerLinks[1]) footerLinks[1].href = `/legal/privacy-${lang}.html`;
         }
         
         function updateTexts() {
             const t = translations[currentLang];
+            if (!t) return;
             
             // Update all elements with data-i18n
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                const keys = key.split('.');
-                let value = t;
-                for (const k of keys) {
-                    value = value[k];
+                let value = t[key];
+                if (value) {
+                    el.textContent = value;
+                } else {
+                    // Handle nested keys like "menu.home"
+                    const keys = key.split('.');
+                    let nestedValue = t;
+                    for (const k of keys) {
+                        if (nestedValue && nestedValue[k]) {
+                            nestedValue = nestedValue[k];
+                        } else {
+                            nestedValue = null;
+                            break;
+                        }
+                    }
+                    if (nestedValue) {
+                        el.textContent = nestedValue;
+                    }
                 }
-                if (value) el.textContent = value;
             });
             
             // Update placeholders
@@ -1516,12 +1530,19 @@
 
             // Load preferred language
             const savedLang = localStorage.getItem('preferredLanguage') || 'en';
-            if (savedLang !== 'en') {
-                currentLang = savedLang;
-                document.querySelector(`.lang-btn[onclick*="${savedLang}"]`).classList.add('active');
-                document.querySelector('.lang-btn[onclick*="en"]').classList.remove('active');
-                updateTexts();
+            currentLang = savedLang;
+            
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeLangBtn = document.getElementById('btn-' + savedLang);
+            if (activeLangBtn) {
+                activeLangBtn.classList.add('active');
             }
+            
+            // Update texts if not English
+            updateTexts();
             
             // Focus on device type selector
             document.getElementById('deviceTypeDisplay').focus();
