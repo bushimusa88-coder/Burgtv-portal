@@ -56,24 +56,19 @@
             position: relative;
         }
 
-        /* Language Switcher - STICKY */
+        /* Language Switcher */
         .language-switcher {
-            position: sticky !important;
-            top: 1rem !important;
-            right: 1rem !important;
-            display: flex !important;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
             gap: 0.5rem;
-            z-index: 9999 !important;
-            background: rgba(17, 17, 19, 0.95) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             padding: 0.5rem;
             border-radius: 12px;
             border: 1px solid var(--border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            float: right;
-            margin-right: 1rem;
-            margin-top: 1rem;
         }
         
         .lang-btn {
@@ -659,23 +654,19 @@
         
         /* Footer */
         .footer {
-            position: sticky;
-            bottom: 0;
+            position: fixed;
+            bottom: 1rem;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             gap: 2rem;
             font-size: 0.85rem;
             z-index: 1000;
-            background: rgba(17, 17, 19, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             padding: 0.75rem 1.5rem;
             border-radius: 12px;
             border: 1px solid var(--border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            margin-bottom: 1rem;
-            margin-top: 2rem;
         }
         
         .footer a {
@@ -792,8 +783,8 @@
 
     <!-- Language Switcher -->
     <div class="language-switcher">
-        <button class="lang-btn active" id="btn-it" onclick="changeLanguage('it')" aria-label="Italiano">IT</button>
-        <button class="lang-btn" id="btn-en" onclick="changeLanguage('en')" aria-label="English">EN</button>
+        <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')" aria-label="English">EN</button>
+        <button class="lang-btn" id="btn-it" onclick="changeLanguage('it')" aria-label="Italiano">IT</button>
         <button class="lang-btn" id="btn-de" onclick="changeLanguage('de')" aria-label="Deutsch">DE</button>
         <button class="lang-btn" id="btn-es" onclick="changeLanguage('es')" aria-label="Español">ES</button>
         <button class="lang-btn" id="btn-fr" onclick="changeLanguage('fr')" aria-label="Français">FR</button>
@@ -981,12 +972,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
-        // Set current year
-        document.addEventListener('DOMContentLoaded', function() {
-            const yearEl = document.getElementById('y');
-            if (yearEl) yearEl.textContent = new Date().getFullYear();
-        });
-
         // ===== CONFIGURAZIONE =====
         const SUPABASE_URL = 'https://ugspmqfduabfmfsoxqoc.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3BtcWZkdWFiZm1mc294cW9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyODY0NjEsImV4cCI6MjA3MDg2MjQ2MX0.euDiQhUl4NJbuVeClfunDV8wVaWITK_UNLrdZeMYKC0';
