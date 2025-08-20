@@ -49,11 +49,18 @@
             color: var(--text);
             min-height: 100vh;
             background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .body-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
             padding: 2rem 1rem 5rem 1rem;
-            position: relative;
         }
         
         /* Hamburger Menu Button */
@@ -186,21 +193,25 @@
             display: block;
         }
 
-        /* Language Switcher */
-        .language-switcher {
+        /* Language Switcher - MUST stay fixed */
+        div.language-switcher {
             position: fixed !important;
-            top: 1rem !important;
-            right: 1rem !important;
+            top: 16px !important;
+            right: 16px !important;
             display: flex !important;
-            gap: 0.5rem;
-            z-index: 9999 !important;
+            flex-direction: row !important;
+            gap: 0.5rem !important;
+            z-index: 999999 !important;
             background: rgba(17, 17, 19, 0.95) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 0.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            padding: 0.5rem !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+            transform: none !important;
+            width: auto !important;
+            height: auto !important;
         }
         
         .lang-btn {
@@ -653,23 +664,26 @@
             margin: 0.5rem 0;
         }
         
-        /* Footer */
-        .footer {
+        /* Footer - MUST stay fixed */
+        div.footer {
             position: fixed !important;
-            bottom: 1rem !important;
+            bottom: 16px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
             display: flex !important;
-            gap: 2rem;
-            font-size: 0.85rem;
-            z-index: 9998 !important;
+            flex-direction: row !important;
+            gap: 2rem !important;
+            font-size: 0.85rem !important;
+            z-index: 999998 !important;
             background: rgba(17, 17, 19, 0.95) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            padding: 0.75rem 1.5rem !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+            width: auto !important;
+            height: auto !important;
         }
         
         .footer a {
@@ -793,8 +807,9 @@
         <button class="lang-btn" id="btn-fr" onclick="changeLanguage('fr')" aria-label="Français">FR</button>
     </div>
 
-    <div class="container">
-        <!-- Registration Form -->
+    <div class="body-wrapper">
+        <div class="container">
+            <!-- Registration Form -->
         <div id="registrationForm">
             <div class="header">
                 <div class="logo">
@@ -962,6 +977,7 @@
                 <span>➕</span>
                 <span data-i18n="registerAnotherButton">Register Another Device</span>
             </button>
+        </div>
         </div>
     </div>
     
