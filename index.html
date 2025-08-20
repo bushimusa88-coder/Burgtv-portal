@@ -51,23 +51,79 @@
             background-attachment: fixed;
             margin: 0;
             padding: 0;
-            position: relative;
-            overflow-x: hidden;
         }
 
-        .body-wrapper {
+        /* Navigation Header - STICKY like homepage */
+        .nav {
+            position: sticky;
+            top: 0;
+            background: rgba(10,10,20,.95);
+            backdrop-filter: saturate(140%) blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            z-index: 100;
+            padding: 0 20px;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+            max-width: 1120px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .brand img {
+            height: 48px;
+            width: auto;
+        }
+
+        /* Language Switcher - same as homepage */
+        .lang-switch {
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-switch button {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,.2);
+            color: #fff;
+            border-radius: 12px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-switch button.active {
+            background: rgba(255,255,255,.1);
+            border-color: #fff;
+        }
+
+        .main-content {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 2rem 1rem 5rem 1rem;
+            min-height: calc(100vh - 72px);
+            padding: 2rem 1rem;
         }
         
-        /* Hamburger Menu Button */
+        /* Hamburger Menu Button - inside nav */
         .menu-toggle {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
             background: transparent;
             border: none;
             cursor: pointer;
@@ -75,13 +131,7 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
-            z-index: 1001;
-            border-radius: 8px;
-            transition: background 0.3s ease;
-        }
-        
-        .menu-toggle:hover {
-            background: var(--card-hover);
+            margin-right: 16px;
         }
         
         .menu-toggle span {
@@ -193,49 +243,6 @@
             display: block;
         }
 
-        /* Language Switcher - MUST stay fixed */
-        div.language-switcher {
-            position: fixed !important;
-            top: 16px !important;
-            right: 16px !important;
-            display: flex !important;
-            flex-direction: row !important;
-            gap: 0.5rem !important;
-            z-index: 999999 !important;
-            background: rgba(17, 17, 19, 0.95) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            padding: 0.5rem !important;
-            border-radius: 12px !important;
-            border: 1px solid var(--border) !important;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
-            transform: none !important;
-            width: auto !important;
-            height: auto !important;
-        }
-        
-        .lang-btn {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid transparent;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .lang-btn:hover {
-            background: var(--card-hover);
-            color: var(--text);
-        }
-        
-        .lang-btn.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
         
         /* Animated background */
         body::before {
@@ -664,36 +671,39 @@
             margin: 0.5rem 0;
         }
         
-        /* Footer - MUST stay fixed */
-        div.footer {
-            position: fixed !important;
-            bottom: 16px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            display: flex !important;
-            flex-direction: row !important;
-            gap: 2rem !important;
-            font-size: 0.85rem !important;
-            z-index: 999998 !important;
-            background: rgba(17, 17, 19, 0.95) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            padding: 0.75rem 1.5rem !important;
-            border-radius: 12px !important;
-            border: 1px solid var(--border) !important;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
-            width: auto !important;
-            height: auto !important;
+        /* Footer - same as homepage */
+        .footer {
+            border-top: 1px solid rgba(255,255,255,.06);
+            padding: 24px 0;
+            background: #0e0e18;
         }
         
-        .footer a {
+        .foot-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
+            font-size: 14px;
             transition: color 0.3s ease;
         }
         
-        .footer a:hover {
-            color: var(--accent-light);
+        .footer-links a:hover {
+            color: var(--accent);
         }
         
         /* Responsive */
@@ -741,13 +751,6 @@
     </style>
 </head>
 <body>
-    <!-- Hamburger Menu -->
-    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-
     <!-- Sidebar Menu -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -798,16 +801,30 @@
     <!-- Overlay -->
     <div class="sidebar-overlay" id="overlay"></div>
 
-    <!-- Language Switcher -->
-    <div class="language-switcher">
-        <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')" aria-label="English">EN</button>
-        <button class="lang-btn" id="btn-it" onclick="changeLanguage('it')" aria-label="Italiano">IT</button>
-        <button class="lang-btn" id="btn-de" onclick="changeLanguage('de')" aria-label="Deutsch">DE</button>
-        <button class="lang-btn" id="btn-es" onclick="changeLanguage('es')" aria-label="Español">ES</button>
-        <button class="lang-btn" id="btn-fr" onclick="changeLanguage('fr')" aria-label="Français">FR</button>
-    </div>
+    <!-- Main Navigation - STICKY like homepage -->
+    <header class="nav">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <a class="brand" href="/">
+                    <img src="logo.svg" alt="BurgTV logo"/>
+                </a>
+            </div>
+            <div class="lang-switch">
+                <button id="btn-it" class="active" aria-label="Italiano">IT</button>
+                <button id="btn-en" aria-label="English">EN</button>
+                <button id="btn-de" aria-label="Deutsch">DE</button>
+                <button id="btn-es" aria-label="Español">ES</button>
+                <button id="btn-fr" aria-label="Français">FR</button>
+            </div>
+        </div>
+    </header>
 
-    <div class="body-wrapper">
+    <div class="main-content">
         <div class="container">
             <!-- Registration Form -->
         <div id="registrationForm">
@@ -978,19 +995,33 @@
                 <span data-i18n="registerAnotherButton">Register Another Device</span>
             </button>
         </div>
-        </div>
     </div>
     
-    <!-- Footer -->
-    <div class="footer">
-        <a href="/legal/terms.html" data-i18n="terms">Terms of Service</a>
-        <a href="/legal/privacy.html" data-i18n="privacy">Privacy Policy</a>
-    </div>
+    <!-- Footer - same as homepage -->
+    <footer class="footer">
+        <div class="foot-inner">
+            <a class="brand" href="/">
+                <img src="logo.svg" style="height:32px;width:auto" alt="BurgTV"/>
+            </a>
+            <div class="footer-links">
+                <a href="/legal/terms.html" data-i18n="terms">Terms of Service</a>
+                <a href="/legal/privacy.html" data-i18n="privacy">Privacy Policy</a>
+                <a href="mailto:support@burgtv.com" data-i18n="contact">Contact</a>
+            </div>
+            <small>© <span id="y"></span> BurgTV – burgtv.com</small>
+        </div>
+    </footer>
     
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
+        // Set current year
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearEl = document.getElementById('y');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+        });
+
         // ===== CONFIGURAZIONE =====
         const SUPABASE_URL = 'https://ugspmqfduabfmfsoxqoc.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3BtcWZkdWFiZm1mc294cW9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyODY0NjEsImV4cCI6MjA3MDg2MjQ2MX0.euDiQhUl4NJbuVeClfunDV8wVaWITK_UNLrdZeMYKC0';
