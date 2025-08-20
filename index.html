@@ -41,8 +41,6 @@
             --border: rgba(255,255,255,0.08);
             --card-bg: rgba(255,255,255,0.03);
             --card-hover: rgba(255,255,255,0.05);
-            --violet: #8a2be2;
-            --muted: #cbd2e6;
         }
         
         body {
@@ -51,61 +49,179 @@
             color: var(--text);
             min-height: 100vh;
             background-attachment: fixed;
-            position: relative;
-            padding-top: 72px; /* Per la navbar sticky */
-        }
-
-        /* Navigation with Hamburger Menu - COPIATO DA HOME PAGE */
-        .nav{position:sticky;top:0;background:rgba(10,10,20,.95);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid rgba(255,255,255,.06);z-index:100}
-        .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px;position:relative;max-width:1120px;margin:0 auto;padding:0 16px}
-        .brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none}
-        .brand-icon{width:auto;height:56px}
-        
-        /* Hamburger Menu Button */
-        .menu-toggle{background:transparent;border:none;cursor:pointer;padding:8px;display:flex;flex-direction:column;gap:5px;margin-right:16px}
-        .menu-toggle span{display:block;width:28px;height:3px;background:var(--text);border-radius:2px;transition:all 0.3s ease}
-        .menu-toggle.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px)}
-        .menu-toggle.active span:nth-child(2){opacity:0}
-        .menu-toggle.active span:nth-child(3){transform:rotate(-45deg) translate(7px,-8px)}
-        
-        /* Sidebar Menu */
-        .sidebar{position:fixed;top:0;left:-320px;width:300px;height:100vh;background:rgba(15,15,25,0.98);backdrop-filter:blur(20px);border-right:1px solid rgba(255,255,255,.08);transition:left 0.3s ease;z-index:99;overflow-y:auto}
-        .sidebar.active{left:0}
-        
-        /* Sidebar Header */
-        .sidebar-header{padding:20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px}
-        .sidebar-logo{height:40px;width:auto}
-        
-        /* Sidebar Navigation */
-        .sidebar-nav{padding:20px 0}
-        .sidebar-nav a{display:flex;align-items:center;padding:16px 24px;color:var(--text);text-decoration:none;font-size:16px;transition:all 0.3s ease;border-left:3px solid transparent}
-        .sidebar-nav a:hover{background:rgba(255,255,255,.05);border-left-color:var(--violet)}
-        .sidebar-nav a.active{background:rgba(138,43,226,.1);border-left-color:var(--violet);color:#fff}
-        .sidebar-nav a span{margin-right:12px;font-size:20px}
-        
-        /* Sidebar Divider */
-        .sidebar-divider{height:1px;background:rgba(255,255,255,.08);margin:10px 20px}
-        
-        /* Overlay */
-        .sidebar-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;z-index:98}
-        .sidebar-overlay.active{display:block}
-        
-        /* Desktop Navigation Links */
-        .links{display:flex;align-items:center;gap:24px}
-        .links a{color:#d9def7;text-decoration:none}.links a:hover{opacity:.8}
-        
-        /* Language Switcher - STILE COME HOME PAGE */
-        .lang-switch{display:flex;gap:8px}
-        .lang-switch button{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:12px;padding:6px 12px;cursor:pointer;font-size:14px;transition:all 0.3s ease}
-        .lang-switch button.active{background:rgba(255,255,255,.1);border-color:#fff}
-
-        /* Main Content Area */
-        .main-content {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem 1rem;
-            min-height: calc(100vh - 72px);
+            position: relative;
+        }
+        
+        /* Hamburger Menu Button */
+        .menu-toggle {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1001;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        
+        .menu-toggle:hover {
+            background: var(--card-hover);
+        }
+        
+        .menu-toggle span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px,6px);
+        }
+        
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px,-8px);
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(15,15,25,0.98);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            transition: left 0.3s ease;
+            z-index: 99;
+            overflow-y: auto;
+        }
+        
+        .sidebar.active {
+            left: 0;
+        }
+
+        /* Sidebar Header */
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+        
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-nav a:hover {
+            background: var(--card-hover);
+            border-left-color: var(--accent);
+        }
+        
+        .sidebar-nav a.active {
+            background: rgba(185, 74, 142, 0.1);
+            border-left-color: var(--accent);
+            color: #fff;
+        }
+        
+        .sidebar-nav a span:first-child {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        /* Sidebar Divider */
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 10px 20px;
+        }
+
+        /* Overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 98;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: var(--card-hover);
+            color: var(--text);
+        }
+        
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
         }
         
         /* Animated background */
@@ -558,10 +674,6 @@
         }
         
         /* Responsive */
-        @media (max-width: 900px) {
-            .links{display:none}
-        }
-        
         @media (max-width: 768px) {
             .container {
                 padding: 2rem 1.5rem;
@@ -576,15 +688,22 @@
                 grid-template-columns: 1fr;
             }
             
+            .language-switcher {
+                top: 0.5rem;
+                right: 0.5rem;
+                padding: 0.3rem;
+            }
+            
+            .lang-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
             .footer {
                 flex-direction: column;
                 gap: 0.5rem;
                 text-align: center;
             }
-        }
-        
-        @media (max-width: 600px) {
-            .lang-switch button{padding:4px 8px;font-size:12px}
         }
         
         @media (max-width: 480px) {
@@ -599,37 +718,45 @@
     </style>
 </head>
 <body>
+    <!-- Hamburger Menu -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
     <!-- Sidebar Menu -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <img src="assets/branding/logo.svg" class="sidebar-logo" alt="Burg IPTV"/>
+            <img src="logo.svg" class="sidebar-logo" alt="BurgTV"/>
         </div>
         <nav class="sidebar-nav">
-            <a href="/">
+            <a href="/" class="active">
                 <span>🏠</span>
                 <span data-i18n="menu.home">Home</span>
             </a>
-            <a href="https://app.burgtv.com" class="active">
+            <a href="/">
                 <span>📺</span>
                 <span data-i18n="menu.portal">Device Portal</span>
             </a>
-            <a href="https://app.burgtv.com">
+            <a href="/">
                 <span>📋</span>
                 <span data-i18n="menu.mylist">My Lists</span>
             </a>
-            <a href="/#features">
+            <div class="sidebar-divider"></div>
+            <a href="#features">
                 <span>✨</span>
                 <span data-i18n="menu.features">Features</span>
             </a>
-            <a href="/#devices">
+            <a href="#devices">
                 <span>📱</span>
                 <span data-i18n="menu.devices">Devices</span>
             </a>
-            <div class="sidebar-divider"></div>
-            <a href="/#faq">
+            <a href="#faq">
                 <span>❓</span>
                 <span data-i18n="menu.faq">FAQ</span>
             </a>
+            <div class="sidebar-divider"></div>
             <a href="/legal/terms.html">
                 <span>📄</span>
                 <span data-i18n="menu.terms">Terms of Service</span>
@@ -648,205 +775,184 @@
     <!-- Overlay -->
     <div class="sidebar-overlay" id="overlay"></div>
 
-    <!-- Main Navigation -->
-    <header class="nav">
-        <div class="nav-inner">
-            <div style="display:flex;align-items:center;">
-                <button class="menu-toggle" id="menuToggle" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <a class="brand" href="/">
-                    <img src="assets/branding/logo.svg" class="brand-icon" alt="Burg IPTV logo"/>
-                </a>
-            </div>
-            <nav class="links">
-                <a data-i18n="nav.features" href="/#features">Features</a>
-                <a data-i18n="nav.devices" href="/#devices">Devices</a>
-                <a data-i18n="nav.faq" href="/#faq">FAQ</a>
-            </nav>
-            <div class="lang-switch">
-                <button id="btn-it" aria-label="Italiano">IT</button>
-                <button id="btn-en" class="active" aria-label="English">EN</button>
-                <button id="btn-de" aria-label="Deutsch">DE</button>
-                <button id="btn-es" aria-label="Español">ES</button>
-                <button id="btn-fr" aria-label="Français">FR</button>
-            </div>
-        </div>
-    </header>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')" aria-label="English">EN</button>
+        <button class="lang-btn" id="btn-it" onclick="changeLanguage('it')" aria-label="Italiano">IT</button>
+        <button class="lang-btn" id="btn-de" onclick="changeLanguage('de')" aria-label="Deutsch">DE</button>
+        <button class="lang-btn" id="btn-es" onclick="changeLanguage('es')" aria-label="Español">ES</button>
+        <button class="lang-btn" id="btn-fr" onclick="changeLanguage('fr')" aria-label="Français">FR</button>
+    </div>
 
-    <div class="main-content">
-        <div class="container">
-            <!-- Registration Form -->
-            <div id="registrationForm">
-                <div class="header">
-                    <div class="logo">
-                        <img src="logo.svg" alt="BurgTV" onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block'">
-                        <div class="logo-fallback">📺</div>
-                    </div>
-                    <h1 data-i18n="title">Register Device</h1>
-                    <p class="subtitle" data-i18n="subtitle">Connect your device to BurgTV and start enjoying premium IPTV services</p>
+    <div class="container">
+        <!-- Registration Form -->
+        <div id="registrationForm">
+            <div class="header">
+                <div class="logo">
+                    <img src="logo.svg" alt="BurgTV" onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block'">
+                    <div class="logo-fallback">📺</div>
                 </div>
-                
-                <!-- Alert container -->
-                <div id="alertContainer"></div>
-                
-                <form class="form" id="deviceForm">
-                    <div class="form-group">
-                        <label for="deviceType" data-i18n="deviceType">Device Type</label>
-                        <div class="device-select-wrapper">
-                            <input type="text" id="deviceTypeDisplay" data-i18n-placeholder="selectDevice" placeholder="Select your device..." readonly onclick="toggleDeviceOptions()">
-                            <input type="hidden" id="deviceType" required>
+                <h1 data-i18n="title">Register Device</h1>
+                <p class="subtitle" data-i18n="subtitle">Connect your device to BurgTV and start enjoying premium IPTV services</p>
+            </div>
+            
+            <!-- Alert container -->
+            <div id="alertContainer"></div>
+            
+            <form class="form" id="deviceForm">
+                <div class="form-group">
+                    <label for="deviceType" data-i18n="deviceType">Device Type</label>
+                    <div class="device-select-wrapper">
+                        <input type="text" id="deviceTypeDisplay" data-i18n-placeholder="selectDevice" placeholder="Select your device..." readonly onclick="toggleDeviceOptions()">
+                        <input type="hidden" id="deviceType" required>
+                        
+                        <div class="device-options" id="deviceOptions">
+                            <div class="device-option" data-value="firetv" onclick="selectDevice('firetv', this)">
+                                <div class="device-icon firetv">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                                <span class="device-name">Amazon Fire TV Stick</span>
+                            </div>
                             
-                            <div class="device-options" id="deviceOptions">
-                                <div class="device-option" data-value="firetv" onclick="selectDevice('firetv', this)">
-                                    <div class="device-icon firetv">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                                            <path d="M8 5v14l11-7z"/>
-                                        </svg>
-                                    </div>
-                                    <span class="device-name">Amazon Fire TV Stick</span>
+                            <div class="device-option" data-value="samsung" onclick="selectDevice('samsung', this)">
+                                <div class="device-icon samsung">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                        <rect x="2" y="6" width="20" height="12" rx="2"/>
+                                        <circle cx="12" cy="12" r="2"/>
+                                    </svg>
                                 </div>
-                                
-                                <div class="device-option" data-value="samsung" onclick="selectDevice('samsung', this)">
-                                    <div class="device-icon samsung">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                                            <rect x="2" y="6" width="20" height="12" rx="2"/>
-                                            <circle cx="12" cy="12" r="2"/>
-                                        </svg>
-                                    </div>
-                                    <span class="device-name">Samsung Smart TV</span>
+                                <span class="device-name">Samsung Smart TV</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="lg" onclick="selectDevice('lg', this)">
+                                <div class="device-icon lg">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                        <circle cx="8" cy="12" r="3"/>
+                                        <path d="M11 9h7v6h-5v-3h3"/>
+                                    </svg>
                                 </div>
-                                
-                                <div class="device-option" data-value="lg" onclick="selectDevice('lg', this)">
-                                    <div class="device-icon lg">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                                            <circle cx="8" cy="12" r="3"/>
-                                            <path d="M11 9h7v6h-5v-3h3"/>
-                                        </svg>
-                                    </div>
-                                    <span class="device-name">LG Smart TV</span>
+                                <span class="device-name">LG Smart TV</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="appletv" onclick="selectDevice('appletv', this)">
+                                <div class="device-icon apple">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#333">
+                                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                    </svg>
                                 </div>
-                                
-                                <div class="device-option" data-value="appletv" onclick="selectDevice('appletv', this)">
-                                    <div class="device-icon apple">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#333">
-                                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                                        </svg>
-                                    </div>
-                                    <span class="device-name">Apple TV</span>
+                                <span class="device-name">Apple TV</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="android" onclick="selectDevice('android', this)">
+                                <div class="device-icon android">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                        <path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/>
+                                    </svg>
                                 </div>
-                                
-                                <div class="device-option" data-value="android" onclick="selectDevice('android', this)">
-                                    <div class="device-icon android">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                                            <path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/>
-                                        </svg>
-                                    </div>
-                                    <span class="device-name">Android TV</span>
+                                <span class="device-name">Android TV</span>
+                            </div>
+                            
+                            <div class="device-option" data-value="ios" onclick="selectDevice('ios', this)">
+                                <div class="device-icon apple">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#333">
+                                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                    </svg>
                                 </div>
-                                
-                                <div class="device-option" data-value="ios" onclick="selectDevice('ios', this)">
-                                    <div class="device-icon apple">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#333">
-                                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                                        </svg>
-                                    </div>
-                                    <span class="device-name">iPhone/iPad</span>
-                                </div>
+                                <span class="device-name">iPhone/iPad</span>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="macAddress" data-i18n="macAddress">MAC Address</label>
-                            <input 
-                                type="text" 
-                                id="macAddress" 
-                                class="input-mac"
-                                placeholder="AA:BB:CC:DD:EE:FF" 
-                                pattern="([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})"
-                                title="Format: AA:BB:CC:DD:EE:FF"
-                                required
-                            >
-                            <div class="form-hint" data-i18n="macHint">Find in device network settings</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="deviceName" data-i18n="deviceName">Device Name (Optional)</label>
-                            <input 
-                                type="text" 
-                                id="deviceName" 
-                                data-i18n-placeholder="deviceNamePlaceholder"
-                                placeholder="Living Room TV"
-                                maxlength="50"
-                            >
-                            <div class="form-hint" data-i18n="deviceNameHint">For easy identification</div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="m3uUrl" data-i18n="m3uUrl">M3U Playlist URL</label>
-                        <input 
-                            type="url" 
-                            id="m3uUrl" 
-                            placeholder="https://example.com/playlist.m3u" 
-                            required
-                        >
-                        <div class="form-hint" data-i18n="m3uHint">Your IPTV provider's playlist URL</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="epgUrl" data-i18n="epgUrl">EPG URL (Optional)</label>
-                        <input 
-                            type="url" 
-                            id="epgUrl" 
-                            placeholder="https://example.com/epg.xml"
-                        >
-                        <div class="form-hint" data-i18n="epgHint">Electronic Program Guide for TV schedules</div>
-                    </div>
-                    
-                    <div class="captcha-container">
-                        <div class="h-captcha" 
-                             data-sitekey="10000000-ffff-ffff-ffff-000000000001"
-                             data-callback="onRegisterCaptcha"
-                             data-theme="dark">
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary" id="submitBtn">
-                        <span>💾</span>
-                        <span data-i18n="registerButton">Register Device</span>
-                    </button>
-                </form>
-            </div>
-            
-            <!-- Success State -->
-            <div id="successState" class="success-state">
-                <div class="success-icon">✅</div>
-                <h1 data-i18n="successTitle">Device Registered Successfully!</h1>
-                <p class="subtitle" data-i18n="successSubtitle">Your device has been registered and is ready to use</p>
-                
-                <div class="device-id-display">
-                    <p><strong data-i18n="yourMac">Your MAC Address:</strong></p>
-                    <div class="device-id-value" id="registeredMac">AA:BB:CC:DD:EE:FF</div>
-                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;" data-i18n="macUsage">
-                        Use this MAC address to access your device dashboard
-                    </p>
                 </div>
                 
-                <button class="btn btn-primary" onclick="goToDashboard()">
-                    <span>🚀</span>
-                    <span data-i18n="dashboardButton">Access Dashboard</span>
-                </button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="macAddress" data-i18n="macAddress">MAC Address</label>
+                        <input 
+                            type="text" 
+                            id="macAddress" 
+                            class="input-mac"
+                            placeholder="AA:BB:CC:DD:EE:FF" 
+                            pattern="([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})"
+                            title="Format: AA:BB:CC:DD:EE:FF"
+                            required
+                        >
+                        <div class="form-hint" data-i18n="macHint">Find in device network settings</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deviceName" data-i18n="deviceName">Device Name (Optional)</label>
+                        <input 
+                            type="text" 
+                            id="deviceName" 
+                            data-i18n-placeholder="deviceNamePlaceholder"
+                            placeholder="Living Room TV"
+                            maxlength="50"
+                        >
+                        <div class="form-hint" data-i18n="deviceNameHint">For easy identification</div>
+                    </div>
+                </div>
                 
-                <button class="btn btn-secondary" onclick="registerAnother()">
-                    <span>➕</span>
-                    <span data-i18n="registerAnotherButton">Register Another Device</span>
+                <div class="form-group">
+                    <label for="m3uUrl" data-i18n="m3uUrl">M3U Playlist URL</label>
+                    <input 
+                        type="url" 
+                        id="m3uUrl" 
+                        placeholder="https://example.com/playlist.m3u" 
+                        required
+                    >
+                    <div class="form-hint" data-i18n="m3uHint">Your IPTV provider's playlist URL</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="epgUrl" data-i18n="epgUrl">EPG URL (Optional)</label>
+                    <input 
+                        type="url" 
+                        id="epgUrl" 
+                        placeholder="https://example.com/epg.xml"
+                    >
+                    <div class="form-hint" data-i18n="epgHint">Electronic Program Guide for TV schedules</div>
+                </div>
+                
+                <div class="captcha-container">
+                    <div class="h-captcha" 
+                         data-sitekey="10000000-ffff-ffff-ffff-000000000001"
+                         data-callback="onRegisterCaptcha"
+                         data-theme="dark">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span>💾</span>
+                    <span data-i18n="registerButton">Register Device</span>
                 </button>
+            </form>
+        </div>
+        
+        <!-- Success State -->
+        <div id="successState" class="success-state">
+            <div class="success-icon">✅</div>
+            <h1 data-i18n="successTitle">Device Registered Successfully!</h1>
+            <p class="subtitle" data-i18n="successSubtitle">Your device has been registered and is ready to use</p>
+            
+            <div class="device-id-display">
+                <p><strong data-i18n="yourMac">Your MAC Address:</strong></p>
+                <div class="device-id-value" id="registeredMac">AA:BB:CC:DD:EE:FF</div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;" data-i18n="macUsage">
+                    Use this MAC address to access your device dashboard
+                </p>
             </div>
+            
+            <button class="btn btn-primary" onclick="goToDashboard()">
+                <span>🚀</span>
+                <span data-i18n="dashboardButton">Access Dashboard</span>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="registerAnother()">
+                <span>➕</span>
+                <span data-i18n="registerAnotherButton">Register Another Device</span>
+            </button>
         </div>
     </div>
     
@@ -866,143 +972,6 @@
         
         // Inizializza Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        // ===== MENU HAMBURGER =====
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        
-        function toggleMenu() {
-            menuToggle.classList.toggle('active');
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
-        
-        if (menuToggle) {
-            menuToggle.addEventListener('click', toggleMenu);
-        }
-        
-        if (overlay) {
-            overlay.addEventListener('click', toggleMenu);
-        }
-        
-        // Close menu on ESC key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && sidebar && sidebar.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
-        
-        // ===== LANGUAGE SWITCHER PER NAVBAR =====
-        const navDict = {
-            it: {
-                "nav.features": "Funzioni",
-                "nav.devices": "Dispositivi",
-                "nav.faq": "FAQ",
-                "menu.home": "Home",
-                "menu.portal": "Portale Dispositivi",
-                "menu.mylist": "Le Mie Liste",
-                "menu.features": "Funzionalità",
-                "menu.devices": "Dispositivi",
-                "menu.faq": "FAQ",
-                "menu.terms": "Termini di Servizio",
-                "menu.privacy": "Privacy Policy",
-                "menu.contact": "Contatti"
-            },
-            en: {
-                "nav.features": "Features",
-                "nav.devices": "Devices",
-                "nav.faq": "FAQ",
-                "menu.home": "Home",
-                "menu.portal": "Device Portal",
-                "menu.mylist": "My Lists",
-                "menu.features": "Features",
-                "menu.devices": "Devices",
-                "menu.faq": "FAQ",
-                "menu.terms": "Terms of Service",
-                "menu.privacy": "Privacy Policy",
-                "menu.contact": "Contact"
-            },
-            de: {
-                "nav.features": "Funktionen",
-                "nav.devices": "Geräte",
-                "nav.faq": "FAQ",
-                "menu.home": "Startseite",
-                "menu.portal": "Geräte-Portal",
-                "menu.mylist": "Meine Listen",
-                "menu.features": "Funktionen",
-                "menu.devices": "Geräte",
-                "menu.faq": "FAQ",
-                "menu.terms": "Nutzungsbedingungen",
-                "menu.privacy": "Datenschutz",
-                "menu.contact": "Kontakt"
-            },
-            es: {
-                "nav.features": "Funciones",
-                "nav.devices": "Dispositivos",
-                "nav.faq": "FAQ",
-                "menu.home": "Inicio",
-                "menu.portal": "Portal de Dispositivos",
-                "menu.mylist": "Mis Listas",
-                "menu.features": "Funciones",
-                "menu.devices": "Dispositivos",
-                "menu.faq": "FAQ",
-                "menu.terms": "Términos de Servicio",
-                "menu.privacy": "Política de Privacidad",
-                "menu.contact": "Contacto"
-            },
-            fr: {
-                "nav.features": "Fonctionnalités",
-                "nav.devices": "Appareils",
-                "nav.faq": "FAQ",
-                "menu.home": "Accueil",
-                "menu.portal": "Portail des Appareils",
-                "menu.mylist": "Mes Listes",
-                "menu.features": "Fonctionnalités",
-                "menu.devices": "Appareils",
-                "menu.faq": "FAQ",
-                "menu.terms": "Conditions d'Utilisation",
-                "menu.privacy": "Politique de Confidentialité",
-                "menu.contact": "Contact"
-            }
-        };
-        
-        function setNavLang(lang) {
-            document.querySelectorAll("[data-i18n]").forEach(el => {
-                const key = el.getAttribute("data-i18n");
-                if (navDict[lang] && navDict[lang][key]) {
-                    el.textContent = navDict[lang][key];
-                }
-            });
-            
-            // Update active language button
-            document.querySelectorAll('.lang-switch button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById('btn-' + lang).classList.add('active');
-        }
-        
-        // Language button event listeners for navbar
-        document.getElementById('btn-it').addEventListener('click', () => {
-            setNavLang('it');
-            changeLanguage('it');
-        });
-        document.getElementById('btn-en').addEventListener('click', () => {
-            setNavLang('en');
-            changeLanguage('en');
-        });
-        document.getElementById('btn-de').addEventListener('click', () => {
-            setNavLang('de');
-            changeLanguage('de');
-        });
-        document.getElementById('btn-es').addEventListener('click', () => {
-            setNavLang('es');
-            changeLanguage('es');
-        });
-        document.getElementById('btn-fr').addEventListener('click', () => {
-            setNavLang('fr');
-            changeLanguage('fr');
-        });
         
         // ===== INTERNATIONALIZATION =====
         const translations = {
@@ -1029,6 +998,15 @@
                 registerAnotherButton: "Register Another Device",
                 terms: "Terms of Service",
                 privacy: "Privacy Policy",
+                "menu.home": "Home",
+                "menu.portal": "Device Portal",
+                "menu.mylist": "My Lists",
+                "menu.features": "Features",
+                "menu.devices": "Devices",
+                "menu.faq": "FAQ",
+                "menu.terms": "Terms of Service",
+                "menu.privacy": "Privacy Policy",
+                "menu.contact": "Contact",
                 errors: {
                     selectDevice: "Please select a device type",
                     enterMac: "Please enter a MAC address",
@@ -1064,6 +1042,15 @@
                 registerAnotherButton: "Registra un Altro Dispositivo",
                 terms: "Termini di Servizio",
                 privacy: "Privacy Policy",
+                "menu.home": "Home",
+                "menu.portal": "Portale Dispositivi",
+                "menu.mylist": "Le Mie Liste",
+                "menu.features": "Funzionalità",
+                "menu.devices": "Dispositivi",
+                "menu.faq": "FAQ",
+                "menu.terms": "Termini di Servizio",
+                "menu.privacy": "Privacy Policy",
+                "menu.contact": "Contatti",
                 errors: {
                     selectDevice: "Seleziona un tipo di dispositivo",
                     enterMac: "Inserisci un indirizzo MAC",
@@ -1099,6 +1086,15 @@
                 registerAnotherButton: "Weiteres Gerät Registrieren",
                 terms: "Nutzungsbedingungen",
                 privacy: "Datenschutz",
+                "menu.home": "Startseite",
+                "menu.portal": "Geräte-Portal",
+                "menu.mylist": "Meine Listen",
+                "menu.features": "Funktionen",
+                "menu.devices": "Geräte",
+                "menu.faq": "FAQ",
+                "menu.terms": "Nutzungsbedingungen",
+                "menu.privacy": "Datenschutz",
+                "menu.contact": "Kontakt",
                 errors: {
                     selectDevice: "Bitte wählen Sie einen Gerätetyp",
                     enterMac: "Bitte geben Sie eine MAC-Adresse ein",
@@ -1134,6 +1130,15 @@
                 registerAnotherButton: "Registrar Otro Dispositivo",
                 terms: "Términos de Servicio",
                 privacy: "Política de Privacidad",
+                "menu.home": "Inicio",
+                "menu.portal": "Portal de Dispositivos",
+                "menu.mylist": "Mis Listas",
+                "menu.features": "Funciones",
+                "menu.devices": "Dispositivos",
+                "menu.faq": "FAQ",
+                "menu.terms": "Términos de Servicio",
+                "menu.privacy": "Política de Privacidad",
+                "menu.contact": "Contacto",
                 errors: {
                     selectDevice: "Por favor selecciona un tipo de dispositivo",
                     enterMac: "Por favor ingresa una dirección MAC",
@@ -1169,6 +1174,15 @@
                 registerAnotherButton: "Enregistrer un Autre Appareil",
                 terms: "Conditions d'Utilisation",
                 privacy: "Politique de Confidentialité",
+                "menu.home": "Accueil",
+                "menu.portal": "Portail des Appareils",
+                "menu.mylist": "Mes Listes",
+                "menu.features": "Fonctionnalités",
+                "menu.devices": "Appareils",
+                "menu.faq": "FAQ",
+                "menu.terms": "Conditions d'Utilisation",
+                "menu.privacy": "Politique de Confidentialité",
+                "menu.contact": "Contact",
                 errors: {
                     selectDevice: "Veuillez sélectionner un type d'appareil",
                     enterMac: "Veuillez entrer une adresse MAC",
@@ -1192,22 +1206,22 @@
             currentLang = lang;
             localStorage.setItem('preferredLanguage', lang);
             
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
             // Update texts
             updateTexts();
             
             // Update HTML lang attribute
             document.documentElement.lang = lang;
             
-            // Update footer links with correct language
-            const termsLink = document.querySelector('a[href*="/legal/terms"]');
-            const privacyLink = document.querySelector('a[href*="/legal/privacy"]');
-            const sidebarTerms = document.querySelector('.sidebar-nav a[href*="/legal/terms"]');
-            const sidebarPrivacy = document.querySelector('.sidebar-nav a[href*="/legal/privacy"]');
-            
-            if (termsLink) termsLink.href = `/legal/terms.html`;
-            if (privacyLink) privacyLink.href = `/legal/privacy.html`;
-            if (sidebarTerms) sidebarTerms.href = `/legal/terms.html`;
-            if (sidebarPrivacy) sidebarPrivacy.href = `/legal/privacy.html`;
+            // Update footer links
+            const footerLinks = document.querySelectorAll('.footer a');
+            footerLinks[0].href = `/legal/terms-${lang}.html`;
+            footerLinks[1].href = `/legal/privacy-${lang}.html`;
         }
         
         function updateTexts() {
@@ -1467,15 +1481,45 @@
             formatMacAddress(e.target);
         });
         
+        // ===== HAMBURGER MENU FUNCTIONALITY =====
+        function toggleMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            menuToggle.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
         // ===== INIZIALIZZAZIONE =====
         document.addEventListener('DOMContentLoaded', function() {
+            // Hamburger Menu Event Listeners
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', toggleMenu);
+            }
+            
+            if (overlay) {
+                overlay.addEventListener('click', toggleMenu);
+            }
+            
+            // Close menu on ESC key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sidebar && sidebar.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+
             // Load preferred language
             const savedLang = localStorage.getItem('preferredLanguage') || 'en';
             if (savedLang !== 'en') {
                 currentLang = savedLang;
-                document.querySelector(`.lang-switch button[id="btn-${savedLang}"]`).classList.add('active');
-                document.querySelector('.lang-switch button[id="btn-en"]').classList.remove('active');
-                setNavLang(savedLang);
+                document.querySelector(`.lang-btn[onclick*="${savedLang}"]`).classList.add('active');
+                document.querySelector('.lang-btn[onclick*="en"]').classList.remove('active');
                 updateTexts();
             }
             
@@ -1483,6 +1527,13 @@
             document.getElementById('deviceTypeDisplay').focus();
         });
         
+        // Make functions global for onclick handlers
+        window.toggleDeviceOptions = toggleDeviceOptions;
+        window.selectDevice = selectDevice;
+        window.goToDashboard = goToDashboard;
+        window.registerAnother = registerAnother;
+        window.changeLanguage = changeLanguage;
+        window.toggleMenu = toggleMenu;
     </script>
 </body>
 </html>
