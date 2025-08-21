@@ -968,16 +968,9 @@
         <a href="/legal/privacy.html" data-i18n="privacy">Privacy Policy</a>
     </div>
     
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <script>
-        // ===== CONFIGURAZIONE =====
-        const SUPABASE_URL = 'https://ugspmqfduabfmfsoxqoc.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3BtcWZkdWFiZm1mc294cW9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyODY0NjEsImV4cCI6MjA3MDg2MjQ2MX0.euDiQhUl4NJbuVeClfunDV8wVaWITK_UNLrdZeMYKC0';
-        
-        // Inizializza Supabase
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // ===== CONFIGURAZIONE API =====
+        const API_BASE_URL = 'https://api.burgtv.com/api/v1';
         
         // ===== INTERNATIONALIZATION =====
         const translations = {
@@ -1452,24 +1445,32 @@
             setLoading(true);
             
             const formData = {
-                p_device_type: document.getElementById('deviceType').value,
-                p_mac_address: document.getElementById('macAddress').value.toUpperCase(),
-                p_device_name: document.getElementById('deviceName').value.trim() || null,
-                p_m3u_url: document.getElementById('m3uUrl').value.trim(),
-                p_epg_url: document.getElementById('epgUrl').value.trim() || null,
-                p_captcha_token: captchaToken
+                device_type: document.getElementById('deviceType').value,
+                mac_address: document.getElementById('macAddress').value.toUpperCase(),
+                device_name: document.getElementById('deviceName').value.trim() || null,
+                m3u_url: document.getElementById('m3uUrl').value.trim(),
+                epg_url: document.getElementById('epgUrl').value.trim() || null,
+                captcha_token: captchaToken
             };
             
             try {
-                // Chiama la funzione RPC per registrare il dispositivo
-                const { data, error } = await supabase.rpc('register_device', formData);
+                // Chiama l'API BurgTV per registrare il dispositivo
+                const response = await fetch(`${API_BASE_URL}/devices/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
                 
-                if (error) {
-                    throw error;
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || `HTTP ${response.status}: ${response.statusText}`);
                 }
                 
-                if (data && data.success) {
-                    showSuccess(formData.p_mac_address);
+                if (data.success) {
+                    showSuccess(formData.mac_address);
                 } else {
                     throw new Error(data.error || 'Registration failed');
                 }
@@ -1480,6 +1481,25 @@
                 resetCaptcha();
             } finally {
                 setLoading(false);
+            }
+        }
+        
+        // ===== VALIDAZIONE M3U =====
+        async function validateM3uUrl(url) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/playlists/validate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: url })
+                });
+                
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.warn('M3U validation failed:', error);
+                return { isValid: true }; // Fallback: assume valid if validation service fails
             }
         }
         
@@ -1499,6 +1519,17 @@
         // Format MAC address on input
         document.getElementById('macAddress').addEventListener('input', function(e) {
             formatMacAddress(e.target);
+        });
+        
+        // Validate M3U URL on blur (when user finishes typing)
+        document.getElementById('m3uUrl').addEventListener('blur', async function(e) {
+            const url = e.target.value.trim();
+            if (url && url.startsWith('http')) {
+                const validation = await validateM3uUrl(url);
+                if (!validation.isValid) {
+                    showAlert(validation.error || 'Invalid M3U playlist URL', 'warning');
+                }
+            }
         });
         
         // ===== HAMBURGER MENU FUNCTIONALITY =====
