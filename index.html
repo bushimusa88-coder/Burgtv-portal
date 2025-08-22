@@ -946,14 +946,10 @@
                 <p><strong data-i18n="yourMac">Your MAC Address:</strong></p>
                 <div class="device-id-value" id="registeredMac">AA:BB:CC:DD:EE:FF</div>
                 <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;" data-i18n="macUsage">
-                    Use this MAC address to access your device dashboard
+                    Use this MAC address in your device app to access your playlist
                 </p>
             </div>
             
-            <button class="btn btn-primary" onclick="goToDashboard()">
-                <span>🚀</span>
-                <span data-i18n="dashboardButton">Access Dashboard</span>
-            </button>
             
             <button class="btn btn-secondary" onclick="registerAnother()">
                 <span>➕</span>
@@ -992,8 +988,7 @@
                 successTitle: "Device Registered Successfully!",
                 successSubtitle: "Your device has been registered and is ready to use",
                 yourMac: "Your MAC Address:",
-                macUsage: "Use this MAC address to access your device dashboard",
-                dashboardButton: "Access Dashboard",
+                macUsage: "Use this MAC address in your device app to access your playlist",
                 registerAnotherButton: "Register Another Device",
                 terms: "Terms of Service",
                 privacy: "Privacy Policy",
@@ -1036,8 +1031,7 @@
                 successTitle: "Dispositivo Registrato con Successo!",
                 successSubtitle: "Il tuo dispositivo è stato registrato ed è pronto all'uso",
                 yourMac: "Il tuo Indirizzo MAC:",
-                macUsage: "Usa questo indirizzo MAC per accedere al pannello del dispositivo",
-                dashboardButton: "Accedi al Pannello",
+                macUsage: "Usa questo indirizzo MAC nella tua app del dispositivo per accedere alla playlist",
                 registerAnotherButton: "Registra un Altro Dispositivo",
                 terms: "Termini di Servizio",
                 privacy: "Privacy Policy",
@@ -1080,8 +1074,7 @@
                 successTitle: "Gerät Erfolgreich Registriert!",
                 successSubtitle: "Ihr Gerät wurde registriert und ist einsatzbereit",
                 yourMac: "Ihre MAC-Adresse:",
-                macUsage: "Verwenden Sie diese MAC-Adresse für den Zugriff auf Ihr Gerätepanel",
-                dashboardButton: "Zum Dashboard",
+                macUsage: "Verwenden Sie diese MAC-Adresse in Ihrer Geräte-App für den Zugriff auf Ihre Playlist",
                 registerAnotherButton: "Weiteres Gerät Registrieren",
                 terms: "Nutzungsbedingungen",
                 privacy: "Datenschutz",
@@ -1124,8 +1117,7 @@
                 successTitle: "¡Dispositivo Registrado con Éxito!",
                 successSubtitle: "Tu dispositivo ha sido registrado y está listo para usar",
                 yourMac: "Tu Dirección MAC:",
-                macUsage: "Usa esta dirección MAC para acceder al panel de tu dispositivo",
-                dashboardButton: "Acceder al Panel",
+                macUsage: "Usa esta dirección MAC en tu app del dispositivo para acceder a tu playlist",
                 registerAnotherButton: "Registrar Otro Dispositivo",
                 terms: "Términos de Servicio",
                 privacy: "Política de Privacidad",
@@ -1168,8 +1160,7 @@
                 successTitle: "Appareil Enregistré avec Succès!",
                 successSubtitle: "Votre appareil a été enregistré et est prêt à l'emploi",
                 yourMac: "Votre Adresse MAC:",
-                macUsage: "Utilisez cette adresse MAC pour accéder au tableau de bord de votre appareil",
-                dashboardButton: "Accéder au Tableau de Bord",
+                macUsage: "Utilisez cette adresse MAC dans votre app d'appareil pour accéder à votre playlist",
                 registerAnotherButton: "Enregistrer un Autre Appareil",
                 terms: "Conditions d'Utilisation",
                 privacy: "Politique de Confidentialité",
@@ -1321,11 +1312,6 @@
             registeredMacAddress = macAddress;
         }
         
-        function goToDashboard() {
-            if (registeredMacAddress) {
-                window.location.href = `/dashboard.html?mac=${registeredMacAddress}`;
-            }
-        }
         
         function registerAnother() {
             // Reset form
