@@ -931,8 +931,12 @@
                 
                 <button type="submit" class="btn btn-primary" id="submitBtn">
                     <span>💾</span>
-                    <span data-i18n="registerButton">Register Device</span>
+                    <span data-i18n="registerButton">Register/Update Device</span>
                 </button>
+                
+                <p style="text-align: center; margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+                    <strong>Note:</strong> If your MAC address is already registered, this will update your playlist instead of creating a new registration.
+                </p>
             </form>
         </div>
         
@@ -1463,7 +1467,51 @@
                 
             } catch (error) {
                 console.error('Registration error:', error);
-                showAlert(getErrorMessage(error), 'error');
+                
+                // Check if it's a MAC address already exists error
+                if (error.message.includes('MAC address already exists') || 
+                    error.message.includes('duplicate key') ||
+                    error.message.includes('already registered')) {
+                    
+                    // Ask user if they want to update the existing registration
+                    const confirmUpdate = confirm(
+                        `This MAC address is already registered. Do you want to update the playlist for this device?\n\n` +
+                        `This will replace the current M3U playlist with the new one.`
+                    );
+                    
+                    if (confirmUpdate) {
+                        // Try to update instead of register
+                        try {
+                            const updateResponse = await fetch(`${API_BASE_URL}/devices/update`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(formData)
+                            });
+                            
+                            const updateData = await updateResponse.json();
+                            
+                            if (!updateResponse.ok) {
+                                throw new Error(updateData.message || `HTTP ${updateResponse.status}`);
+                            }
+                            
+                            if (updateData.success) {
+                                showAlert('Device playlist updated successfully!', 'success');
+                                showSuccess(formData.mac_address);
+                                return;
+                            } else {
+                                throw new Error(updateData.error || 'Update failed');
+                            }
+                            
+                        } catch (updateError) {
+                            console.error('Update error:', updateError);
+                            showAlert('Update failed: ' + updateError.message, 'error');
+                        }
+                    }
+                } else {
+                    showAlert(getErrorMessage(error), 'error');
+                }
                 resetCaptcha();
             } finally {
                 setLoading(false);
