@@ -1505,8 +1505,19 @@
                     body: JSON.stringify({ url: url })
                 });
                 
-                const data = await response.json();
-                return data;
+                const result = await response.json();
+                
+                // Handle API response structure
+                if (result.success && result.data) {
+                    return result.data; // Return the validation data directly
+                } else if (!result.success) {
+                    return { 
+                        isValid: false, 
+                        error: result.message || result.error || 'Invalid M3U playlist URL'
+                    };
+                } else {
+                    return result; // Fallback to original structure
+                }
             } catch (error) {
                 console.warn('M3U validation failed:', error);
                 return { isValid: true }; // Fallback: assume valid if validation service fails
